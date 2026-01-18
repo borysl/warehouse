@@ -1,0 +1,22 @@
+{
+  "name": "uds-inventory",
+  "version": "0.1.0",
+  "description": "Application to manage inventory for NGO",
+  "keywords": [
+    "inventory",
+    "asset",
+    "ngo"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "inventory.git"
+  },
+  "license": "ISC",
+  "author": "Borys Lebeda",
+  "type": "commonjs",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

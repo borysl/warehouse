@@ -1,5 +1,7 @@
 const http = require('http');
 
+const packageJson = require('../package.json');
+
 const PORT = 3000;
 
 const server = http.createServer((req, res) => {
@@ -8,8 +10,8 @@ const server = http.createServer((req, res) => {
     if (req.url === '/version') {
         res.writeHead(200);
         res.end(JSON.stringify({
-            name: "Inventory App",
-            version: "0.1.0"
+            name: packageJson.name,
+            version: packageJson.version
         }));
     } else {
         res.writeHead(404);
