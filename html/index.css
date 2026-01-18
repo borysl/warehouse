@@ -186,3 +186,20 @@ input:not(:placeholder-shown) + label {
         font-size: 0.9rem;
     }
 }
+
+/* Footer Styles */
+.main-footer {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    text-align: center;
+    border-top: 1px solid var(--input-border);
+    margin-top: auto;
+}
+
+.main-footer p {
+    color: #64748b; /* Slate 500 */
+    margin-bottom: 0;
+    font-size: 0.875rem;
+}
