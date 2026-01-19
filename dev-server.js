@@ -6,7 +6,7 @@ const { spawn } = require('child_process');
 const FRONTEND_PORT = 8080;
 const BACKEND_PORT = 3000;
 const FRONTEND_DIR = path.join(__dirname, 'html');
-const API_PATH = 'api';
+const API_PATH = 'inv-api';
 
 function startBackend() {
     console.log(`Starting backend on port ${BACKEND_PORT}...`);
@@ -27,12 +27,12 @@ const backendProcess = startBackend();
 const server = http.createServer((req, res) => {
     console.log(`${req.method} ${req.url}`);
 
-    // Proxy /api requests to backend
+    // Proxy api requests to backend
     if (req.url.startsWith(`/${API_PATH}/`)) {
         const options = {
             hostname: 'localhost',
             port: BACKEND_PORT,
-            path: req.url.replace(new RegExp(`^/${API_PATH}`), ''), // Rewrite /api/version -> /version
+            path: req.url.replace(new RegExp(`^/${API_PATH}`), ''),
             method: req.method,
             headers: req.headers,
         };
