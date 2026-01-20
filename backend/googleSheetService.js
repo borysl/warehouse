@@ -144,38 +144,93 @@ class GoogleSheetService {
         }
     }
 
+    // New Helper: Parse Cell Data to Value
+    parseCellData(header, cellData) {
+        if (!cellData) return null;
+
+        // 1. Check for Smart Chips (People)
+        if (cellData.chipRuns && cellData.chipRuns.length > 0) {
+            for (const run of cellData.chipRuns) {
+                if (run.chip && run.chip.personProperties) {
+                    const props = run.chip.personProperties;
+                    const email = props.email;
+                    // Use formattedValue (what is shown in the cell) as the name if available
+                    // Fallback to chip properties or derived from email
+                    const name = cellData.formattedValue || props.name || props.displayName || (props.firstName ? `${props.firstName} ${props.lastName}`.trim() : null) || email.split('@')[0];
+                    
+                    if (email) {
+                         return `${name} <${email}>`;
+                    }
+                }
+            }
+        }
+
+        // 2. Check for Hyperlink Formula
+        const userEnteredValue = cellData.userEnteredValue;
+        if (userEnteredValue && userEnteredValue.formulaValue) {
+             const val = this.formulaToValue(header, userEnteredValue.formulaValue);
+             // formulaToValue returns the input if it doesn't match HYPERLINK regex.
+             // But valid formula might be just a value? No, formulaValue starts with =
+             if (val !== userEnteredValue.formulaValue) return val; 
+        }
+
+        // 3. LastUpdate specific handling (using formattedValue)
+        if (header === 'LastUpdate') {
+             return this.parseDate(cellData.formattedValue);
+        }
+        
+        // 4. Fallback to formattedValue (what user sees) or effectiveValue
+        // effectiveValue might be { numberValue: ... } or { stringValue: ... }
+        if (cellData.effectiveValue) {
+            if (cellData.effectiveValue.stringValue !== undefined) return cellData.effectiveValue.stringValue;
+            if (cellData.effectiveValue.numberValue !== undefined) return cellData.effectiveValue.numberValue;
+             if (cellData.effectiveValue.boolValue !== undefined) return cellData.effectiveValue.boolValue;
+        }
+        
+        return cellData.formattedValue || null;
+    }
+
     async loadData() {
         if (!this.isInitialized) await this.connect();
 
         try {
-            const res = await this.sheets.spreadsheets.values.get({
+            // We use spreadsheets.get to retrieve rich cell data (chips, formuas)
+            // Fields: include grid data for the specific sheet
+            const res = await this.sheets.spreadsheets.get({
                 spreadsheetId: Config.SPREADSHEET_ID,
-                range: `${Config.INVENTORY_SHEET_NAME}!A:N`,
-                valueRenderOption: 'FORMULA', // Important to get the actual formula to parse back
+                ranges: [`${Config.INVENTORY_SHEET_NAME}!A:N`],
+                includeGridData: true,
+                fields: 'sheets(data(rowData(values(userEnteredValue,effectiveValue,formattedValue,chipRuns))))',
             });
 
-            const rows = res.data.values;
+            const sheet = res.data.sheets?.[0];
+            if (!sheet || !sheet.data || !sheet.data[0].rowData) {
+                this.cache = [];
+                return;
+            }
+
+            const rows = sheet.data[0].rowData;
+            
+            // Assume first row is headers (index 0)
             if (rows.length < 2) {
                 this.cache = [];
                 return;
             }
 
-            // Assume first row is headers. mapping based on index
-            // We use fixed headers to ensure consistent mapping even if sheet headers vary slightly
-            this.cache = rows.slice(1).map((row, index) => {
+            // Map rows to objects
+            this.cache = rows.slice(1).map((rowObj, index) => {
                 const item = {};
+                const values = rowObj.values || [];
+                
                 this.headers.forEach((header, i) => {
-                    let value = row[i];
-                    // Basic type conversion
+                    const cellData = values[i];
+                    let value = this.parseCellData(header, cellData);
+
+                    // Type casting for Id/Quantity if not caught by parseCellData
                     if (header === 'Id' || header === 'Quantity') {
                         value = value ? Number(value) : (header === 'Id' ? index + 1 : 0);
-                    } else if (header === 'LastUpdate') {
-                        // Convert string from sheet to Date object
-                        value = this.parseDate(value);
-                    } else {
-                        // Attempt to parse formula if present
-                        value = this.formulaToValue(header, value);
                     }
+                    
                     item[header] = value === undefined ? null : value;
                 });
                 return item;

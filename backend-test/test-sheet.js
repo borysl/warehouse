@@ -13,9 +13,10 @@ async function runTest() {
             console.log('First item:', data[0]);
         }
 
-        console.log('\n2. Searching for "Hammer"...');
-        const searchResults = sheetService.search('Hammer');
+        console.log('\n2. Searching for "Canopy"...');
+        const searchResults = sheetService.search('Canopy');
         console.log(`Found ${searchResults.length} matches.`);
+        searchResults.forEach(item => console.log(` - ID: ${item.Id}, Name: ${item.Name}`));
 
         console.log('\n3. Adding a temporary item...');
         const newItem = {
