@@ -35,6 +35,31 @@ npm install --production
 pm2 start npm --name "inventory-server" -- start
 ```
 
+## Google Sheets Integration
+
+To enable the backend to read/write to Google Sheets, you must configure a Service Account.
+
+### Prerequisites
+
+1.  **Create a Service Account**:
+    *   Go to the [Google Cloud Console](https://console.cloud.google.com/).
+    *   Create a new project or select an existing one.
+    *   Enable the **Google Sheets API** and **Google Drive API**.
+    *   Go to **IAM & Admin** > **Service Accounts**.
+    *   Create a service account.
+    *   (Optional) You can skip the role assignment step. The actual **Write/Upload** permissions will be granted later by **Sharing** the specific Google Sheet and Drive Folder with this service account's email (just like sharing with a human).
+    *   Create a JSON key for this account and download it (click on Tab Keys --> Create Key --> JSON)
+
+2.  **Configure Credentials**:
+    *   Rename the downloaded JSON key file to `credentials.json`.
+    *   Place `credentials.json` in the root of the project (same level as `package.json`). This file is neither committed nor deployed, so you will need to do this operation for every environment.
+
+3.  **Share Resources**:
+    *   Open the newly created `credentials.json` file and copy the `client_email` address.
+    *   Go to your Google Sheet (`https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI`) and click **Share**.
+    *   Paste the service account email and give it **Editor** access.
+    *   Go to the Google Drive folder (`https://drive.google.com/drive/folders/1yNHvBcpHG37vO0LpJk2vPmPkL4Jp-bS-`) and share it with the service account email as well (`Contributor` access).
+
 ## Recommended settings for nginx
 
 ```conf
