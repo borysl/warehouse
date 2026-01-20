@@ -106,8 +106,8 @@ class GoogleSheetService {
         // Check if formula
         if (value.startsWith('=HYPERLINK')) {
             // Regex to extract params: =HYPERLINK("url", "label")
-            // This is a naive regex, might fail with complex nested quotes, but sufficient for our generator
-            const match = value.match(/=HYPERLINK\("([^"]+)",\s*"([^"]+)"\)/i);
+            // Allow spaces around comma, parenthesis
+            const match = value.match(/=HYPERLINK\s*\(\s*"([^"]+)"\s*,\s*"([^"]+)"\s*\)/i);
             if (match) {
                 const url = match[1];
                 const label = match[2];
@@ -229,7 +229,7 @@ class GoogleSheetService {
         // 3. Group Text Tokens
         const textGroups = [];
         let currentGroup = []; 
-
+        
         for (let i = 0; i < textTokens.length; i++) {
             const t = textTokens[i];
             
@@ -276,6 +276,20 @@ class GoogleSheetService {
     // New Helper: Parse Cell Data to Value
     parseCellData(header, cellData) {
         if (!cellData) return null;
+
+        // 0. Check for direct Hyperlink (e.g. Ctrl+K) - Priority for Photo
+        if (header === 'Photo') {
+             // Check textFormatRuns (rich text links)
+             if (cellData.textFormatRuns) {
+                 for (const run of cellData.textFormatRuns) {
+                     if (run.format && run.format.link && run.format.link.uri) {
+                         return run.format.link.uri;
+                     }
+                 }
+             }
+             
+             if (cellData.hyperlink) return cellData.hyperlink;             
+        }
 
         // 1. Check for Smart Chips (People)
         if (cellData.chipRuns && cellData.chipRuns.length > 0) {
@@ -329,7 +343,8 @@ class GoogleSheetService {
                 spreadsheetId: Config.SPREADSHEET_ID,
                 ranges: [`${Config.INVENTORY_SHEET_NAME}!A:Q`], // Extended range for new columns
                 includeGridData: true,
-                fields: 'sheets(data(rowData(values(userEnteredValue,effectiveValue,formattedValue,chipRuns))))',
+                includeGridData: true,
+                fields: 'sheets(data(rowData(values(userEnteredValue,effectiveValue,formattedValue,chipRuns,hyperlink,textFormatRuns))))',
             });
 
             const sheet = res.data.sheets?.[0];

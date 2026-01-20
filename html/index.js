@@ -75,7 +75,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${escapeHtml(item.Category)}</td>
                 <td>${item.Quantity}</td>
                 <td>${escapeHtml(item.MainLocation)}</td>
-                <td><div class="desc-cell" title="${escapeHtml(item.Description)}">${escapeHtml(item.Description)}</div></td>
+                <td>
+                    <div class="desc-cell" title="${escapeHtml(item.Description)}">
+                        ${item.Photo ? `<span class="photo-icon" onclick="window.open('${item.Photo}', '_blank')">📷</span>` : ''}
+                        ${escapeHtml(item.Description)}
+                    </div>
+                </td>
                 <td>
                     <button class="action-btn checkout-btn" data-id="${item.Id}">Checkout</button>
                 </td>

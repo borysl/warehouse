@@ -262,6 +262,21 @@ input:not(:placeholder-shown) + label {
     color: white;
 }
 
+/* Help Text Indentation */
 #help-text li {
     margin-left: 4ch;
+}
+
+/* Photo Icon Styles */
+.photo-icon {
+    cursor: pointer;
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+    vertical-align: middle;
+    transition: transform 0.2s;
+    display: inline-block;
+}
+
+.photo-icon:hover {
+    transform: scale(1.2);
 }
