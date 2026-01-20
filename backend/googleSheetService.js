@@ -144,6 +144,135 @@ class GoogleSheetService {
         }
     }
 
+    // --- Search Helper Methods ---
+
+    parseQuery(query) {
+        if (!query) return { filters: [], textGroups: [] };
+
+        // 1. Extract Quoted Strings and placeholder them
+        const placeholders = [];
+        let maskedQuery = query.replace(/"([^"]+)"/g, (match, content) => {
+            placeholders.push(content);
+            return `__QUOTE_${placeholders.length}__`; 
+        });
+
+        const tokens = maskedQuery.split(/\s+/).filter(t => t.length > 0);
+        
+        const filters = [];
+        const textTokens = [];
+
+        // 2. Process Tokens
+        const fieldRegex = /^(id|type|category|holder|location|owner|stored|description|damages|checklist|log|donor|name):(.+)$/i;
+        const dateRegex = /^(registered|updated)([><=])(.+)$/i;
+
+        tokens.forEach(token => {
+            let processedToken = token;
+            // Restore quotes in value if present
+            if (token.startsWith('__QUOTE_')) {
+                 const idx = parseInt(token.match(/\d+/)[0]);
+                 processedToken = placeholders[idx]; // Arrays 0-indexed, length used above? Wait. 
+                 // push returns len. So index is len-1.
+                 // Correct logic: placeholders.push(content) -> len 1. index 0.
+                 // Above I used placeholders.length. So 0th item is at index 0.. wait.
+                 // let's verify line 7: placeholders.push(content); return `...${placeholders.length - 1}__`
+            }
+            // Use simpler logic for placeholder reference 
+        });
+        
+        // Redoing placeholder logic cleanly inside this block to ensure correctness
+        
+        // RE-IMPLEMENTATION of parseQuery
+        
+        const placeholdersRef = [];
+        maskedQuery = query.replace(/"([^"]+)"/g, (match, content) => {
+            placeholdersRef.push(content);
+            return `__QUOTE_${placeholdersRef.length - 1}__`;
+        });
+        
+        const safeTokens = maskedQuery.split(/\s+/).filter(t => t.length > 0);
+
+        safeTokens.forEach(token => {
+            // Check for Field Prefixes
+            const fieldMatch = token.match(fieldRegex);
+            if (fieldMatch) {
+                let val = fieldMatch[2];
+                if (val.startsWith('__QUOTE_')) {
+                    const idx = parseInt(val.match(/\d+/)[0]);
+                    val = placeholdersRef[idx];
+                }
+                filters.push({ field: fieldMatch[1].toLowerCase(), value: val, operator: '=' });
+                return;
+            }
+
+            // Check for Date Operators
+            const dateMatch = token.match(dateRegex);
+            if (dateMatch) {
+                filters.push({ field: dateMatch[1].toLowerCase(), value: dateMatch[3], operator: dateMatch[2], isDate: true });
+                return;
+            }
+            
+            // Check for Boolean Operator &
+            if (token === '&') {
+                textTokens.push({ value: '&', isOp: true });
+                return;
+            }
+
+            // Plain text
+             if (token.startsWith('__QUOTE_')) {
+                 const idx = parseInt(token.match(/\d+/)[0]);
+                 textTokens.push({ value: placeholdersRef[idx], isQuote: true });
+            } else {
+                 textTokens.push({ value: token, isQuote: false });
+            }
+        });
+
+        // 3. Group Text Tokens
+        const textGroups = [];
+        let currentGroup = []; 
+
+        for (let i = 0; i < textTokens.length; i++) {
+            const t = textTokens[i];
+            
+            if (t.isOp) continue; // Skip '&'
+
+            // Check if connected to PREVIOUS by &
+            const prev = textTokens[i-1];
+            const isConnectedToPrev = prev && prev.isOp;
+
+            if (isConnectedToPrev) {
+                currentGroup.push(t);
+            } else {
+                // Not connected to prev (OR). Start new Group.
+                if (currentGroup.length > 0) textGroups.push(currentGroup);
+                currentGroup = [t];
+            }
+        }
+        if (currentGroup.length > 0) textGroups.push(currentGroup);
+        
+        return { filters, textGroups };
+    }
+
+    matchDate(itemDate, operator, targetDateStr) {
+        if (!itemDate || !(itemDate instanceof Date)) return false;
+        const targetDate = new Date(targetDateStr);
+        if (isNaN(targetDate.getTime())) return false;
+        
+        // Compare timestamps
+        // For equality, we might care about just the DATE part if input is YYYY-MM-DD
+        // But user input might contain time? Let's assume day granularity if target is simple date
+        
+        const itemTime = itemDate.getTime();
+        const targetTime = targetDate.getTime();
+
+        if (operator === '>') return itemTime > targetTime;
+        if (operator === '<') return itemTime < targetTime;
+        if (operator === '=') {
+             // Check Same Day
+             return itemDate.toDateString() === targetDate.toDateString();
+        }
+        return false;
+    }
+
     // New Helper: Parse Cell Data to Value
     parseCellData(header, cellData) {
         if (!cellData) return null;
@@ -253,12 +382,68 @@ class GoogleSheetService {
 
     search(query) {
         if (!query) return this.cache;
-        const q = query.toLowerCase();
-        return this.cache.filter(item => 
-            (item.Name && item.Name.toLowerCase().includes(q)) ||
-            (item.Description && item.Description.toLowerCase().includes(q)) ||
-            (item.Type && item.Type.toLowerCase().includes(q))
-        );
+        
+        const { filters, textGroups } = this.parseQuery(query);
+        
+        // Search Fields Map
+        const fieldMap = {
+            'stored': 'StorageGuidelines',
+            'registered': 'Registered',
+            'updated': 'LastUpdate',
+            'location': 'MainLocation'
+            // others map 1:1 usually (id, type, name, holder, location, owner, description, damages, checklist, log, donor)
+        };
+        
+        const freeTextFields = ['Name', 'Description', 'Damages', 'Checklist', 'Holder', 'MainLocation', 'StorageGuidelines'];
+
+        return this.cache.filter(item => {
+            // 1. Check Filters (AND)
+            for (const f of filters) {
+                let key = fieldMap[f.field.toLowerCase()] || f.field.charAt(0).toUpperCase() + f.field.slice(1);
+                
+                // Special case: 'id' mapping
+                if (f.field === 'id') key = 'Id';
+
+                const itemKey = Object.keys(item).find(k => k.toLowerCase() === key.toLowerCase());
+                 
+                 // If key not found in item, fail match?
+                 if (!itemKey) {
+                     return false; 
+                 }
+
+                 let val = item[itemKey];
+
+                 if (f.isDate) {
+                     if (!this.matchDate(val, f.operator, f.value)) return false;
+                 } else {
+                     // String comparison (Includes)
+                     if (val === null || val === undefined) return false;
+                     // For ID, exact match string
+                     if (f.field === 'id') {
+                         if (String(val) != f.value) return false;
+                     } else {
+                         if (!String(val).toLowerCase().includes(String(f.value).toLowerCase())) return false;
+                     }
+                 }
+            }
+
+            // 2. Check Free Text (OR of AND-groups)
+            if (textGroups.length === 0) return true; // Only filters
+            
+            // match = (Group1 Matches) OR (Group2 Matches) ...
+            // GroupMatch = (Term1 Matches) AND (Term2 Matches)
+            
+            return textGroups.some(group => {
+                return group.every(term => {
+                    const searchStr = term.value.toLowerCase();
+                    // Search in all freeTextFields
+                    return freeTextFields.some(field => {
+                        const val = item[field];
+                        return val && String(val).toLowerCase().includes(searchStr);
+                    });
+                });
+            });
+        });
     }
 
     async addItem(item) {

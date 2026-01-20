@@ -203,3 +203,65 @@ input:not(:placeholder-shown) + label {
     margin-bottom: 0;
     font-size: 0.875rem;
 }
+
+/* Inventory Grid Styles */
+.results-grid {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 2rem;
+}
+
+.inventory-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: var(--text-color);
+}
+
+.inventory-table th,
+.inventory-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border: 1px solid #334155; /* Slate 700 - Grey Border */
+}
+
+.inventory-table th {
+    background-color: var(--input-bg);
+    font-weight: 600;
+}
+
+/* Link Styles */
+.item-link {
+    color: #ffffff; /* White by default */
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.item-link:hover {
+    text-decoration: underline;
+}
+
+.item-link:visited {
+    color: #94a3b8; /* Slate 400 - Grey for visited */
+}
+
+/* Action Buttons */
+.action-btn {
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--input-border);
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.action-btn:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+#help-text li {
+    margin-left: 4ch;
+}
