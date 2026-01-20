@@ -1,6 +1,6 @@
 
 const { google } = require('googleapis');
-const Config = require('./config');
+const Config = require('../config');
 const path = require('path');
 
 class GoogleSheetService {
