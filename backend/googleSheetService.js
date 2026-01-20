@@ -10,9 +10,9 @@ class GoogleSheetService {
         this.drive = null;
         this.isInitialized = false;
         this.headers = [
-            'Id', 'Name', 'Type', 'Quantity', 'Holder', 'StorageGuidelines',
-            'MainLocation', 'LastUpdate', 'Log', 'Description', 'Photo',
-            'Owner', 'Donor', 'Checklist'
+            'Id', 'Name', 'Type', 'Category', 'Quantity', 'Holder', 'StorageGuidelines',
+            'MainLocation', 'LastUpdate', 'Log', 'Description', 'Damages', 'Photo',
+            'Owner', 'Checklist', 'Donor', 'Registered'
         ];
     }
 
@@ -174,8 +174,8 @@ class GoogleSheetService {
              if (val !== userEnteredValue.formulaValue) return val; 
         }
 
-        // 3. LastUpdate specific handling (using formattedValue)
-        if (header === 'LastUpdate') {
+        // 3. Date handling (LastUpdate and Registered)
+        if (header === 'LastUpdate' || header === 'Registered') {
              return this.parseDate(cellData.formattedValue);
         }
         
@@ -198,7 +198,7 @@ class GoogleSheetService {
             // Fields: include grid data for the specific sheet
             const res = await this.sheets.spreadsheets.get({
                 spreadsheetId: Config.SPREADSHEET_ID,
-                ranges: [`${Config.INVENTORY_SHEET_NAME}!A:N`],
+                ranges: [`${Config.INVENTORY_SHEET_NAME}!A:Q`], // Extended range for new columns
                 includeGridData: true,
                 fields: 'sheets(data(rowData(values(userEnteredValue,effectiveValue,formattedValue,chipRuns))))',
             });
@@ -268,6 +268,9 @@ class GoogleSheetService {
         if (item.Type && !Config.ItemTypes.includes(item.Type)) {
              throw new Error(`Invalid Item Type. Allowed: ${Config.ItemTypes.join(', ')}`);
         }
+        if (item.Category && !Config.Categories.includes(item.Category)) {
+             throw new Error(`Invalid Category. Allowed: ${Config.Categories.join(', ')}`);
+        }
         if (item.MainLocation && !Config.Locations.includes(item.MainLocation)) {
             throw new Error(`Invalid Location. Allowed: ${Config.Locations.join(', ')}`);
         }
@@ -283,13 +286,14 @@ class GoogleSheetService {
         const newItem = {
             ...item,
             Id: newId,
-            LastUpdate: new Date(), // Store as Date object in cache
+            LastUpdate: new Date(), // Store as Date object
+            Registered: new Date(), // Set Registered on creation
         };
 
         // Prepare row for sheet
         const row = this.headers.map(header => {
             let val = newItem[header];
-            if (header === 'LastUpdate' && val instanceof Date) {
+            if ((header === 'LastUpdate' || header === 'Registered') && val instanceof Date) {
                 val = this.formatDate(val);
             }
             // Add formula conversion
@@ -326,12 +330,16 @@ class GoogleSheetService {
             ...currentItem,
             ...updates,
             Id: currentItem.Id, // Ensure ID doesn't change
+            Registered: currentItem.Registered, // Ensure Registered doesn't change (immutable via patch)
             LastUpdate: new Date() // Update timestamp as Date object
         };
 
         // Validate Enums if changed
         if (updates.Type && !Config.ItemTypes.includes(updates.Type)) {
              throw new Error(`Invalid Item Type. Allowed: ${Config.ItemTypes.join(', ')}`);
+        }
+        if (updates.Category && !Config.Categories.includes(updates.Category)) {
+             throw new Error(`Invalid Category. Allowed: ${Config.Categories.join(', ')}`);
         }
         if (updates.MainLocation && !Config.Locations.includes(updates.MainLocation)) {
             throw new Error(`Invalid Location. Allowed: ${Config.Locations.join(', ')}`);
@@ -349,7 +357,7 @@ class GoogleSheetService {
         // We overwrite the entire row to ensure consistency
         const row = this.headers.map(header => {
              let val = updatedItem[header];
-             if (header === 'LastUpdate' && val instanceof Date) {
+             if ((header === 'LastUpdate' || header === 'Registered') && val instanceof Date) {
                  val = this.formatDate(val);
              }
              // Add formula conversion
@@ -361,7 +369,7 @@ class GoogleSheetService {
         try {
             await this.sheets.spreadsheets.values.update({
                 spreadsheetId: Config.SPREADSHEET_ID,
-                range: `${Config.INVENTORY_SHEET_NAME}!A${rowNumber}:N${rowNumber}`,
+                range: `${Config.INVENTORY_SHEET_NAME}!A${rowNumber}:Q${rowNumber}`,
                 valueInputOption: 'USER_ENTERED',
                 resource: { values: [row] },
             });

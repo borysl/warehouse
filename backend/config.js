@@ -20,7 +20,8 @@ const Config = {
         'Expendables',
         'Stuff',
         'Goods'
-    ]
+    ],
+    Categories: ['Uncategorized', 'Medical', 'Military', 'Banquet', 'Events', 'PrintedMaterial', 'Office']
 };
 
 module.exports = Config;
