@@ -18,7 +18,7 @@ git remote add pi <your-user>@pi:/home/<your user>/inventory.git
 
 ```sh
 #!/bin/bash
-git --work-tree=/var/www/inventory --git-dir=/home/myuser/inventory.git checkout -f
+git --work-tree=/var/www/inventory --git-dir=/home/<your user>/inventory.git checkout -f
 
 cd /var/www/inventory/backend
 
@@ -27,7 +27,7 @@ npm install --production
 pm2 reload inventory-server
 ```
 
-5. Start server with pm3:
+5. Start server with pm2:
 
 ```sh
 cd /var/www/inventory/backend
