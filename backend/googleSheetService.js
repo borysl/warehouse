@@ -14,6 +14,8 @@ class GoogleSheetService {
             'MainLocation', 'LastUpdate', 'Log', 'Description', 'Damages', 'Photo',
             'Owner', 'Checklist', 'Donor', 'Registered'
         ];
+        this.credentialsPath = null;
+        this.clientEmail = null;
     }
 
     // Helper to validate format "Name <email@domain>"
@@ -127,9 +129,26 @@ class GoogleSheetService {
     }
 
     async connect() {
+        const fs = require('fs');
+        const credentialsPath = path.resolve(Config.CREDENTIALS_PATH);
+        
+        // 1. Check if credentials file exists
+        if (!fs.existsSync(credentialsPath)) {
+            throw new Error(`credential path cannot be read - see if you can find ${credentialsPath} server`);
+        }
+
+        let credentials;
+        try {
+            credentials = JSON.parse(fs.readFileSync(credentialsPath, 'utf8'));
+        } catch (e) {
+            throw new Error(`credential path cannot be read - see if you can find ${credentialsPath} server`);
+        }
+
+        const clientEmail = credentials.client_email || 'unknown';
+
         try {
             const auth = new google.auth.GoogleAuth({
-                keyFile: path.resolve(Config.CREDENTIALS_PATH),
+                keyFile: credentialsPath,
                 scopes: Config.SCOPES,
             });
 
@@ -137,10 +156,13 @@ class GoogleSheetService {
             this.sheets = google.sheets({ version: 'v4', auth: client });
             this.drive = google.drive({ version: 'v3', auth: client });
             this.isInitialized = true;
+            this.clientEmail = clientEmail;
+            this.credentialsPath = credentialsPath;
             console.log('Connected to Google Services');
         } catch (error) {
             console.error('Failed to connect to Google Services:', error);
-            throw error;
+            // Specific Auth Error
+            throw new Error(`Service Account ${clientEmail} cannot be authenticated. Pls check data in ${credentialsPath}`);
         }
     }
 
@@ -339,13 +361,27 @@ class GoogleSheetService {
         try {
             // We use spreadsheets.get to retrieve rich cell data (chips, formuas)
             // Fields: include grid data for the specific sheet
-            const res = await this.sheets.spreadsheets.get({
-                spreadsheetId: Config.SPREADSHEET_ID,
-                ranges: [`${Config.INVENTORY_SHEET_NAME}!A:Q`], // Extended range for new columns
-                includeGridData: true,
-                includeGridData: true,
-                fields: 'sheets(data(rowData(values(userEnteredValue,effectiveValue,formattedValue,chipRuns,hyperlink,textFormatRuns))))',
-            });
+            const spreadsheetUrl = `https://docs.google.com/spreadsheets/d/${Config.SPREADSHEET_ID}`;
+            
+            let res;
+            try {
+                res = await this.sheets.spreadsheets.get({
+                    spreadsheetId: Config.SPREADSHEET_ID,
+                    ranges: [`${Config.INVENTORY_SHEET_NAME}!A:Q`], // Extended range for new columns
+                    includeGridData: true,
+                    fields: 'sheets(data(rowData(values(userEnteredValue,effectiveValue,formattedValue,chipRuns,hyperlink,textFormatRuns))))',
+                });
+            } catch (apiError) {
+                // Access Denied usually 403 or 404
+                if (apiError.code === 403 || apiError.code === 404) {
+                    throw new Error(`Make sure that user ${this.clientEmail} can take read data from ${spreadsheetUrl}`);
+                }
+                // Auth failure 401 or crypto errors (invalid key content)
+                if (apiError.code === 401 || apiError.message.includes('auth') || apiError.code === 'ERR_OSSL_UNSUPPORTED') {
+                    throw new Error(`Service Account ${this.clientEmail} cannot be authenticated. Pls check data in ${this.credentialsPath}`);
+                }
+                throw apiError;
+            }
 
             const sheet = res.data.sheets?.[0];
             if (!sheet || !sheet.data || !sheet.data[0].rowData) {
@@ -361,24 +397,28 @@ class GoogleSheetService {
                 return;
             }
 
-            // Map rows to objects
-            this.cache = rows.slice(1).map((rowObj, index) => {
-                const item = {};
-                const values = rowObj.values || [];
-                
-                this.headers.forEach((header, i) => {
-                    const cellData = values[i];
-                    let value = this.parseCellData(header, cellData);
-
-                    // Type casting for Id/Quantity if not caught by parseCellData
-                    if (header === 'Id' || header === 'Quantity') {
-                        value = value ? Number(value) : (header === 'Id' ? index + 1 : 0);
-                    }
+            try {
+                // Map rows to objects
+                this.cache = rows.slice(1).map((rowObj, index) => {
+                    const item = {};
+                    const values = rowObj.values || [];
                     
-                    item[header] = value === undefined ? null : value;
+                    this.headers.forEach((header, i) => {
+                        const cellData = values[i];
+                        let value = this.parseCellData(header, cellData);
+
+                        // Type casting for Id/Quantity if not caught by parseCellData
+                        if (header === 'Id' || header === 'Quantity') {
+                            value = value ? Number(value) : (header === 'Id' ? index + 1 : 0);
+                        }
+                        
+                        item[header] = value === undefined ? null : value;
+                    });
+                    return item;
                 });
-                return item;
-            });
+            } catch (parseError) {
+                throw new Error(`Cannot parse data from ${spreadsheetUrl}, see error: ${parseError.message}`);
+            }
 
             console.log(`Loaded ${this.cache.length} items from sheet.`);
         } catch (error) {

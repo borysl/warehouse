@@ -35,7 +35,17 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             resultsGrid.innerHTML = '<p>Searching...</p>';
             const res = await fetch(`/inv-api/search?q=${encodeURIComponent(query)}`);
-            if (!res.ok) throw new Error('Search failed');
+            
+            if (!res.ok) {
+                const text = await res.text();
+                if (text.includes('Fatal Error')) {
+                    resultsGrid.innerHTML = text; // Inject the red error HTML
+                } else {
+                    resultsGrid.innerHTML = '<p>Error loading results.</p>';
+                }
+                return;
+            }
+
             const data = await res.json();
             renderGrid(data);
         } catch (err) {
@@ -117,6 +127,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (res.ok) {
                 const data = await res.json();
                 document.getElementById('version-text').textContent = `Version: ${data.version}`;
+            } else {
+                const text = await res.text();
+                if (text.includes('Fatal Error')) {
+                    helpTextDiv.innerHTML = text;
+                }
             }
         } catch (e) {
             document.getElementById('version-text').textContent = 'Version: Unknown';

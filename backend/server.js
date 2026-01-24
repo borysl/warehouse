@@ -1,8 +1,21 @@
-
 const http = require('http');
 const url = require('url');
 const packageJson = require('../package.json');
-const sheetService = require('./googleSheetService');
+
+let sheetService;
+let fatalError = null;
+
+try {
+    sheetService = require('./googleSheetService');
+} catch (e) {
+    console.error('Initial Load Error:', e);
+    // Identify config errors
+    if (e.message.includes('config') || e.stack.includes('config')) {
+        fatalError = 'Cannot read server config file: check config.js and its structure';
+    } else {
+        fatalError = e.message;
+    }
+}
 
 const PORT = process.env.PORT || 3000;
 
@@ -25,6 +38,19 @@ const getBody = (req) => {
 };
 
 const server = http.createServer(async (req, res) => {
+    // Check for fatal startup errors
+    if (fatalError) {
+        res.setHeader('Content-Type', 'text/html; charset=utf-8');
+        res.writeHead(500);
+        res.end(`
+            <div id="fatal-error-message" style="color: red; font-family: sans-serif; padding: 20px; border: 2px solid red; margin: 20px 0; background: #fff1f1;">
+                <h2>Fatal Error</h2>
+                <p>${fatalError}</p>
+            </div>
+        `);
+        return;
+    }
+
     res.setHeader('Content-Type', 'application/json');
     // iterate over CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -109,11 +135,15 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, '0.0.0.0', async () => {
     console.log(`Server running at http://localhost:${PORT}/`);
+    
+    if (fatalError) return; // Already failed during require
+
     try {
         console.log('Initializing Google Sheet Service...');
         await sheetService.loadData();
         console.log('Google Sheet Service Initialized.');
     } catch (e) {
         console.error('Failed to initialize Google Sheet Service:', e);
+        fatalError = e.message;
     }
 });
