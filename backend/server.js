@@ -41,6 +41,24 @@ const getBody = (req) => {
     });
 };
 
+// Helper to parse cookies
+const getCookies = (req) => {
+    const list = {};
+    const cookieHeader = req.headers.cookie;
+    if (!cookieHeader) return list;
+
+    cookieHeader.split(';').forEach(cookie => {
+        let [name, ...rest] = cookie.split('=');
+        name = name.trim();
+        if (!name) return;
+        const value = rest.join('=').trim();
+        if (!value) return;
+        list[name] = decodeURIComponent(value);
+    });
+
+    return list;
+};
+
 const server = http.createServer(async (req, res) => {
     // Check for fatal startup errors
     if (fatalError) {
@@ -98,19 +116,49 @@ const server = http.createServer(async (req, res) => {
                 });
                 const payload = ticket.getPayload();
                 
+                const user = {
+                    name: payload.name,
+                    email: payload.email,
+                    picture: payload.picture
+                };
+
+                // Simple session encoding (Base64 for demonstration, in production use JWT or encrypted session)
+                const sessionData = Buffer.from(JSON.stringify(user)).toString('base64');
+                
+                res.setHeader('Set-Cookie', `session=${sessionData}; Path=/; HttpOnly; SameSite=Lax; Max-Age=86400`);
                 res.writeHead(200);
                 res.end(JSON.stringify({
                     success: true,
-                    user: {
-                        name: payload.name,
-                        email: payload.email,
-                        picture: payload.picture
-                    }
+                    user: user
                 }));
             } catch (err) {
                 res.writeHead(401);
                 res.end(JSON.stringify({ error: 'Invalid Token' }));
             }
+            return;
+        }
+
+        if (pathName === '/auth/me' && req.method === 'GET') {
+            const cookies = getCookies(req);
+            if (cookies.session) {
+                try {
+                    const userData = JSON.parse(Buffer.from(cookies.session, 'base64').toString());
+                    res.writeHead(200);
+                    res.end(JSON.stringify({ user: userData }));
+                    return;
+                } catch (e) {
+                    // Invalid session cookie
+                }
+            }
+            res.writeHead(401);
+            res.end(JSON.stringify({ user: null }));
+            return;
+        }
+
+        if (pathName === '/auth/logout' && req.method === 'POST') {
+            res.setHeader('Set-Cookie', 'session=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0');
+            res.writeHead(200);
+            res.end(JSON.stringify({ success: true }));
             return;
         }
         // Ideally we load on startup, but for now we ensure it's called.

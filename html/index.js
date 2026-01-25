@@ -13,6 +13,9 @@ function load() {
     // Initialize Google Auth
     initAuth();
 
+    // Check for existing session
+    checkSession();
+
     // Fetch Version on Load
     fetchVersion();
 
@@ -144,6 +147,19 @@ function load() {
         }
     }
 
+    async function checkSession() {
+        try {
+            const res = await fetch('/inv-api/auth/me');
+            if (res.ok) {
+                const data = await res.json();
+                user = data.user;
+                updateAuthUI();
+            }
+        } catch (e) {
+            console.error('Failed to check session:', e);
+        }
+    }
+
     async function initAuth() {
         try {
             const res = await fetch('/inv-api/config');
@@ -158,11 +174,29 @@ function load() {
                 });
 
                 loginBtn.addEventListener('click', () => {
-                    google.accounts.id.prompt();
+                    if (user) {
+                        logout();
+                    } else {
+                        google.accounts.id.prompt();
+                    }
                 });
             }
         } catch (e) {
             console.error('Failed to initialize Google Auth:', e);
+        }
+    }
+
+    async function logout() {
+        if (!confirm('Are you sure you want to log out?')) return;
+        
+        try {
+            const res = await fetch('/inv-api/auth/logout', { method: 'POST' });
+            if (res.ok) {
+                user = null;
+                location.reload(); // Refresh to clear state and update UI
+            }
+        } catch (e) {
+            console.error('Logout error:', e);
         }
     }
 
