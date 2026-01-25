@@ -43,7 +43,14 @@ function load() {
     async function performSearch(query) {
         try {
             resultsGrid.innerHTML = '<p>Searching...</p>';
-            const res = await fetch(`/inv-api/search?q=${encodeURIComponent(query)}`);
+            
+            // Handle :me alias for owner, holder, donor
+            let effectiveQuery = query;
+            if (user && user.email) {
+                effectiveQuery = query.replace(/\b(owner|holder|donor):me\b/gi, `$1:${user.email}`);
+            }
+
+            const res = await fetch(`/inv-api/search?q=${encodeURIComponent(effectiveQuery)}`);
             
             if (!res.ok) {
                 const text = await res.text();
