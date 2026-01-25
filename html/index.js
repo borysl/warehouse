@@ -5,7 +5,7 @@ function load() {
     const helpTextDiv = document.getElementById('help-text');
     const resultsContainer = document.getElementById('results-container');
     const resultsGrid = document.getElementById('results-grid');
-    const loginBtn = document.querySelector('.login-btn');
+    const authContainer = document.getElementById('auth-container');
 
     let googleClientId = null;
     let user = null;
@@ -173,13 +173,8 @@ function load() {
                     use_fedcm_for_prompt: false
                 });
 
-                loginBtn.addEventListener('click', () => {
-                    if (user) {
-                        logout();
-                    } else {
-                        google.accounts.id.prompt();
-                    }
-                });
+                // Render initial UI (Login button or User Info)
+                updateAuthUI();
             }
         } catch (e) {
             console.error('Failed to initialize Google Auth:', e);
@@ -221,14 +216,23 @@ function load() {
     }
 
     function updateAuthUI() {
+        if (!authContainer) return;
+
         if (user) {
-            loginBtn.innerHTML = `
-                <div class="user-info">
-                    <img src="${user.picture}" alt="${user.name}" class="user-pic">
-                    <span>${user.name}</span>
-                </div>
+            authContainer.innerHTML = `
+                <button class="login-btn logged-in">
+                    <div class="user-info">
+                        <img src="${user.picture}" alt="${user.name}" class="user-pic">
+                        <span>${user.name}</span>
+                    </div>
+                </button>
             `;
-            loginBtn.classList.add('logged-in');
+            authContainer.querySelector('.login-btn').addEventListener('click', logout);
+        } else {
+            authContainer.innerHTML = `<button class="login-btn">Login</button>`;
+            authContainer.querySelector('.login-btn').addEventListener('click', () => {
+                google.accounts.id.prompt();
+            });
         }
     }
 };
