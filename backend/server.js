@@ -1,6 +1,10 @@
 const http = require('http');
 const url = require('url');
 const packageJson = require('../package.json');
+const Config = require('../config');
+const { OAuth2Client } = require('google-auth-library');
+
+const authClient = new OAuth2Client(Config.GOOGLE_CLIENT_ID);
 
 let sheetService;
 let fatalError = null;
@@ -76,7 +80,39 @@ const server = http.createServer(async (req, res) => {
             return;
         }
 
-        // Initialize service if not ready (lazy init usually handled in service, but good to ensure data loaded)
+        if (pathName === '/config' && req.method === 'GET') {
+            res.writeHead(200);
+            res.end(JSON.stringify({
+                googleClientId: Config.GOOGLE_CLIENT_ID
+            }));
+            return;
+        }
+
+        if (pathName === '/auth/google' && req.method === 'POST') {
+            const { credential } = await getBody(req);
+            
+            try {
+                const ticket = await authClient.verifyIdToken({
+                    idToken: credential,
+                    audience: Config.GOOGLE_CLIENT_ID,
+                });
+                const payload = ticket.getPayload();
+                
+                res.writeHead(200);
+                res.end(JSON.stringify({
+                    success: true,
+                    user: {
+                        name: payload.name,
+                        email: payload.email,
+                        picture: payload.picture
+                    }
+                }));
+            } catch (err) {
+                res.writeHead(401);
+                res.end(JSON.stringify({ error: 'Invalid Token' }));
+            }
+            return;
+        }
         // Ideally we load on startup, but for now we ensure it's called.
         // The service handles its own init state check.
         

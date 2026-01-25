@@ -1,10 +1,17 @@
-document.addEventListener('DOMContentLoaded', () => {
+// document.addEventListener('DOMContentLoaded', load);
+
+function load() {
     const searchInput = document.getElementById('inventory-search');
     const helpTextDiv = document.getElementById('help-text');
     const resultsContainer = document.getElementById('results-container');
     const resultsGrid = document.getElementById('results-grid');
+    const loginBtn = document.querySelector('.login-btn');
 
-    let debounceTimeout;
+    let googleClientId = null;
+    let user = null;
+
+    // Initialize Google Auth
+    initAuth();
 
     // Fetch Version on Load
     fetchVersion();
@@ -12,16 +19,15 @@ document.addEventListener('DOMContentLoaded', () => {
     searchInput.addEventListener('input', (e) => {
         const query = e.target.value.trim();
         
-        // Hide help text logic
-        // "collapse when user types over 3 symbols besides spaces"
         const cleanLength = query.replace(/\s/g, '').length;
 
-        if (cleanLength > 3) {
+        if (cleanLength >= 3) {
             helpTextDiv.style.display = 'none';
             resultsContainer.style.display = 'block';
 
             clearTimeout(debounceTimeout);
-            debounceTimeout = setTimeout(() => {
+            var debounceTimeout = setTimeout(() => {
+                console.log('searching');
                 performSearch(query);
             }, 300);
         } else {
@@ -137,4 +143,58 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('version-text').textContent = 'Version: Unknown';
         }
     }
-});
+
+    async function initAuth() {
+        try {
+            const res = await fetch('/inv-api/config');
+            if (res.ok) {
+                const config = await res.json();
+                googleClientId = config.googleClientId;
+                
+                google.accounts.id.initialize({
+                    client_id: googleClientId,
+                    callback: handleCredentialResponse,
+                    use_fedcm_for_prompt: false
+                });
+
+                loginBtn.addEventListener('click', () => {
+                    google.accounts.id.prompt();
+                });
+            }
+        } catch (e) {
+            console.error('Failed to initialize Google Auth:', e);
+        }
+    }
+
+    async function handleCredentialResponse(response) {
+        try {
+            const res = await fetch('/inv-api/auth/google', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ credential: response.credential })
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                user = data.user;
+                updateAuthUI();
+            } else {
+                alert('Auth failed');
+            }
+        } catch (e) {
+            console.error('Auth error:', e);
+        }
+    }
+
+    function updateAuthUI() {
+        if (user) {
+            loginBtn.innerHTML = `
+                <div class="user-info">
+                    <img src="${user.picture}" alt="${user.name}" class="user-pic">
+                    <span>${user.name}</span>
+                </div>
+            `;
+            loginBtn.classList.add('logged-in');
+        }
+    }
+};

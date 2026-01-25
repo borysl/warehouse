@@ -60,6 +60,38 @@ To enable the backend to read/write to Google Sheets, you must configure a Servi
     *   Paste the service account email and give it **Editor** access.
     *   Go to the Google Drive folder (`https://drive.google.com/drive/folders/1yNHvBcpHG37vO0LpJk2vPmPkL4Jp-bS-`) and share it with the service account email as well (`Contributor` access).
 
+## Google Authentication (Login)
+
+To enable users to login with their individual Google Accounts, you must configure a Google OAuth 2.0 Client ID.
+
+### Setup Instructions for GCP Administrators
+
+1.  **Configure OAuth Consent Screen**:
+    *   In the [Google Cloud Console](https://console.cloud.google.com/), go to **APIs & Services** > **OAuth consent screen**.
+    *   Create new credentials or **Get started**
+    *   Type `uds-inventory` in the app name field
+    *   Type your email in the user support email field
+    *   Select **Internal**.
+    *   Fill in the notification email.
+    *   Agree to Google API Services: User Data Policy.
+    *   Press **Create**.
+    *   Add the scope `.../auth/userinfo.profile` and `.../auth/userinfo.email`.
+
+2.  **Create OAuth 2.0 Client ID**:
+    *   Go to **APIs & Services** > **Credentials**.
+    *   Click **Create Credentials** > **OAuth client ID**.
+    *   Select **Web application** as the Application type.
+    *   Put `uds-inventory-web` as name
+    *   Under **Authorized JavaScript origins**, add your application URLs:
+        *   `http://localhost:3000`
+        *   `http://localhost:8080`
+        *   `https://inventory.ukrainedefensesupport.org`
+    *   Click **Create**.
+
+3.  **Update Configuration**:
+    *   Copy the **Client ID** (it looks like `xxxxxxxxxxxx-xxxxxxxxxxxxxxxx.apps.googleusercontent.com`).
+    *   Paste it into the `GOOGLE_CLIENT_ID` field in your `config.js` file.
+
 ## Recommended settings for nginx
 
 ```conf

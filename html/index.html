@@ -6,18 +6,19 @@
     <title>Inventory Search</title>
     <meta name="description" content="Search the inventory database efficiently.">
     <link rel="stylesheet" href="index.css">
+    <script src="index.js"></script>
+    <script src="https://accounts.google.com/gsi/client" onload="load()" async defer></script>
 </head>
 <body>
     <header class="sticky-header">
         <div class="header-content">
             <div class="header-top">
                 <img src="Logo.png" alt="UDS Inventory Logo" class="logo">
-                <h1>UDS Inventory</h1>
+                <h1>UDS Warehouse <a href="https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI"><img height="32px" src="sheets.png" alt="Google Sheets" class="sheets-icon"/></a></h1>
                 <button class="login-btn">Login</button>
             </div>
-            
+
             <div class="search-wrapper">
-                <!-- Input must be before label for CSS-only floating label sibling selector -->
                 <input type="text" id="inventory-search" name="q" placeholder=" " autocomplete="off">
                 <label for="inventory-search">Search inventory:</label>
             </div>
@@ -25,8 +26,9 @@
     </header>
 
     <main class="content">
+
         <div id="help-text">
-            <p>Type in search box the item that you are looking for.</p>
+            <p>Type in search box the item that you are looking for. The search triggers automatically when 3 or more characters are input</p>
             <h2>Syntax of the search:</h2>
             <ul>
                 <li><strong>Free text:</strong> Search in Name, Description, Damages, Checklist, Holder, Location, StorageGuidelines.</li>
@@ -69,6 +71,5 @@
         <p id="version-text">Version: Loading...</p>
     </footer>
 
-    <script src="index.js"></script>
 </body>
 </html>

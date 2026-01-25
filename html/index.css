@@ -267,6 +267,27 @@ input:not(:placeholder-shown) + label {
     margin-left: 4ch;
 }
 
+/* User Profile */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.user-pic {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid #334155;
+}
+
+.login-btn.logged-in {
+    background: transparent;
+    border: none;
+    cursor: default;
+    color: white;
+}
+
 /* Photo Icon Styles */
 .photo-icon {
     cursor: pointer;
