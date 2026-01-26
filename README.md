@@ -7,25 +7,41 @@ Application to manage inventory for NGO
 Assuming you have SSH access to your Raspberry Pi
 
 1. Install: nginx, node.js, pm2
+
+    ```sh
+    sudo apt update && sudo apt upgrade -y
+    
+    curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+    sudo apt install -y nodejs git nginx certbot python3-certbot-nginx
+
+    sudo npm install pm2 -g
+    ```
+
+    Ensure pm2 log also captures date and time:
+
+    ```sh
+    pm2 set pm2:log_date_format "YYYY-MM-DD HH:mm:ss"
+    ```
+
 2. Have bare repository ~/inventory.git
 3. Have remote pi:
 
-```sh
-git remote add pi <your-user>@pi:/home/<your user>/inventory.git
-```
+    ```sh
+    git remote add pi <your-user>@pi:/home/<your user>/inventory.git
+    ```
 
 4. Add hook to your repo:
 
-```sh
-#!/bin/bash
-git --work-tree=/var/www/inventory --git-dir=/home/<your user>/inventory.git checkout -f
+    ```sh
+    #!/bin/bash
+    git --work-tree=/var/www/inventory --git-dir=/home/<your user>/inventory.git checkout -f main
 
-cd /var/www/inventory/backend
+    cd /var/www/inventory/backend
 
-npm install --production
+    npm install --production
 
-pm2 reload inventory-server
-```
+    pm2 reload inventory-server
+    ```
 
 5. Start server with pm2:
 
