@@ -53,7 +53,8 @@ const server = http.createServer((req, res) => {
     }
 
     // Serve static files
-    let filePath = path.join(FRONTEND_DIR, req.url === '/' ? 'index.html' : req.url);
+    const isSearchRoute = req.url.startsWith('/search');
+    let filePath = path.join(FRONTEND_DIR, (req.url === '/' || isSearchRoute) ? 'index.html' : req.url);
     const extname = path.extname(filePath);
     let contentType = 'text/html';
 

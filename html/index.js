@@ -9,6 +9,7 @@ function load() {
 
     let googleClientId = null;
     let user = null;
+    let lastPerformedQuery = null;
 
     // Initialize Google Auth
     initAuth();
@@ -18,6 +19,41 @@ function load() {
 
     // Fetch Version on Load
     fetchVersion();
+    
+    // Check for search query in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialQuery = urlParams.get('q');
+    if (initialQuery) {
+        searchInput.value = initialQuery;
+        // Small delay to ensure any initialization completes if needed
+        setTimeout(() => {
+            performSearch(initialQuery);
+        }, 100);
+    }
+
+    let debounceTimeout = null;
+
+    searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            let query = searchInput.value.trim();
+            if (query) {
+                if (debounceTimeout) clearTimeout(debounceTimeout);
+                
+                // Expand :me for the URL
+                let urlQuery = query;
+                if (user && user.email) {
+                    urlQuery = query.replace(/\b(owner|holder|donor):me\b/gi, `$1:${user.email}`);
+                }
+                
+                // Update URL without reload
+                const newUrl = `/search?q=${encodeURIComponent(urlQuery)}`;
+                window.history.pushState({ q: urlQuery }, '', newUrl);
+                
+                // Perform the search immediately
+                performSearch(urlQuery);
+            }
+        }
+    });
 
     searchInput.addEventListener('input', (e) => {
         const query = e.target.value.trim();
@@ -28,8 +64,8 @@ function load() {
             helpTextDiv.style.display = 'none';
             resultsContainer.style.display = 'block';
 
-            clearTimeout(debounceTimeout);
-            var debounceTimeout = setTimeout(() => {
+            if (debounceTimeout) clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(() => {
                 console.log('searching');
                 performSearch(query);
             }, 300);
@@ -41,7 +77,14 @@ function load() {
     });
 
     async function performSearch(query) {
+        if (!query || query === lastPerformedQuery) return;
+        lastPerformedQuery = query;
+
         try {
+            // Ensure UI shows results container
+            helpTextDiv.style.display = 'none';
+            resultsContainer.style.display = 'block';
+
             resultsGrid.innerHTML = '<p>Searching...</p>';
             
             // Handle :me alias for owner, holder, donor
