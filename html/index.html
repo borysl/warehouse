@@ -18,13 +18,13 @@
                 <div id="auth-container"></div>
             </div>
 
-            <div class="search-container">
+            <form id="search-form" class="search-container">
                 <div class="search-wrapper">
                     <input type="text" id="inventory-search" name="q" placeholder=" " autocomplete="off">
                     <label for="inventory-search">Search inventory:</label>
                 </div>
-                <button id="search-btn" class="search-btn" title="Search">🔍</button>
-            </div>
+                <button id="search-btn" type="submit" class="search-btn" title="Search">🔍</button>
+            </form>
         </div>
     </header>
 
@@ -70,6 +70,68 @@
         <div id="item-container" style="display: none;">
         </div>
     </main>
+
+    <template id="search-results-template">
+        <table class="inventory-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>T</th>
+                    <th>C</th>
+                    <th>Qty</th>
+                    <th>L</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </template>
+
+    <template id="inventory-row-template">
+        <tr>
+            <td class="col-name"><a href="#" class="item-link"></a></td>
+            <td class="col-type"></td>
+            <td class="col-category"></td>
+            <td class="col-qty"></td>
+            <td class="col-location"></td>
+            <td class="col-desc">
+                <div class="desc-cell">
+                    <span class="photo-icon">📷</span>
+                    <span class="desc-text"></span>
+                </div>
+            </td>
+            <td class="col-actions">
+                <button class="action-btn"></button>
+            </td>
+        </tr>
+    </template>
+
+    <template id="item-detail-template">
+        <div class="item-detail">
+            <button class="back-btn">← Back to Results</button>
+            <h2 class="item-name"></h2>
+            <div class="detail-grid">
+                <div class="detail-item"><strong>ID:</strong> <span class="detail-id"></span></div>
+                <div class="detail-item"><strong>Type:</strong> <span class="detail-type"></span></div>
+                <div class="detail-item"><strong>Category:</strong> <span class="detail-category"></span></div>
+                <div class="detail-item"><strong>Quantity:</strong> <span class="detail-qty"></span></div>
+                <div class="detail-item"><strong>Location:</strong> <span class="detail-location"></span></div>
+                <div class="detail-item"><strong>Holder:</strong> <span class="detail-holder"></span></div>
+                <div class="detail-item"><strong>Owner:</strong> <span class="detail-owner"></span></div>
+                <div class="detail-item"><strong>Donor:</strong> <span class="detail-donor"></span></div>
+                <div class="detail-item"><strong>Storage Guidelines:</strong> <p class="detail-storage"></p></div>
+                <div class="detail-item"><strong>Description:</strong> <p class="detail-description"></p></div>
+                <div class="detail-item"><strong>Damages:</strong> <p class="detail-damages"></p></div>
+                <div class="detail-item"><strong>Registered:</strong> <span class="detail-registered"></span></div>
+                <div class="detail-item"><strong>Last Updated:</strong> <span class="detail-updated"></span></div>
+            </div>
+            <div class="detail-photos"></div>
+            <div class="detail-actions">
+                <button class="main-action-btn"></button>
+            </div>
+        </div>
+    </template>
 
     <footer class="main-footer">
         <p id="version-text">Version: Loading...</p>

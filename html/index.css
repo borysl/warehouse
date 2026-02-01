@@ -356,3 +356,101 @@ input:not(:placeholder-shown) + label {
 .photo-icon:hover {
     transform: scale(1.2);
 }
+
+/* Item Detail View */
+#item-container {
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-top: 1rem;
+    box-shadow: 0 10px 30px -10px var(--shadow-color);
+}
+
+.item-detail .back-btn {
+    background: transparent;
+    border: 1px solid var(--input-border);
+    color: #94a3b8;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 2rem;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+}
+
+.item-detail .back-btn:hover {
+    color: white;
+    border-color: var(--primary-color);
+    background-color: rgba(59, 130, 246, 0.1);
+}
+
+.item-detail .item-name {
+    font-size: 2.25rem;
+    margin-bottom: 2rem;
+    color: #f8fafc;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 0.5rem;
+    display: inline-block;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.detail-item strong {
+    color: #94a3b8;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.detail-item span, .detail-item p {
+    font-size: 1rem;
+    color: #e2e8f0;
+}
+
+.detail-item p {
+    white-space: pre-wrap;
+    line-height: 1.6;
+}
+
+.detail-actions {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--input-border);
+}
+
+.main-action-btn {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.main-action-btn.checkout {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.main-action-btn.checkin {
+    background-color: #10b981;
+    color: white;
+}
+
+.main-action-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
