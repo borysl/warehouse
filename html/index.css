@@ -265,6 +265,27 @@ input:not(:placeholder-shown) + label {
     color: white;
 }
 
+/* Specific Action Colors */
+.checkin-btn {
+    border-color: #10b981; /* Emerald 500 */
+    color: #10b981;
+}
+
+.checkin-btn:hover {
+    background-color: #10b981;
+    border-color: #10b981;
+}
+
+.login-btn-action {
+    border-color: #f59e0b; /* Amber 500 */
+    color: #f59e0b;
+}
+
+.login-btn-action:hover {
+    background-color: #f59e0b;
+    border-color: #f59e0b;
+}
+
 /* Help Text Indentation */
 #help-text li {
     margin-left: 4ch;

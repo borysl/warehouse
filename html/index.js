@@ -66,7 +66,6 @@ function load() {
 
             if (debounceTimeout) clearTimeout(debounceTimeout);
             debounceTimeout = setTimeout(() => {
-                console.log('searching');
                 performSearch(query);
             }, 300);
         } else {
@@ -113,6 +112,13 @@ function load() {
         }
     }
 
+    function refreshSearch() {
+        if (searchInput.value.trim()) {
+            lastPerformedQuery = null;
+            performSearch(searchInput.value.trim());
+        }
+    }
+
     function renderGrid(items) {
         if (!items || items.length === 0) {
             resultsGrid.innerHTML = '<p>No items found.</p>';
@@ -137,6 +143,23 @@ function load() {
         `;
 
         items.forEach(item => {
+            let buttonText = 'Checkout';
+            let buttonClass = 'checkout-btn';
+            
+            if (!user) {
+                buttonText = 'Login to proceed';
+                buttonClass = 'login-btn-action';
+            } else if (item.Holder) {
+                // Extract email from "Name <email>"
+                const match = item.Holder.match(/<([^>]+)>/);
+                const holderEmail = match ? match[1] : item.Holder;
+                
+                if (holderEmail === user.email) {
+                    buttonText = 'Checkin';
+                    buttonClass = 'checkin-btn';
+                }
+            }
+
             html += `
             <tr>
                 <td><a href="/item/${item.Id}" class="item-link">${escapeHtml(item.Name)}</a></td>
@@ -151,7 +174,7 @@ function load() {
                     </div>
                 </td>
                 <td>
-                    <button class="action-btn checkout-btn" data-id="${item.Id}">Checkout</button>
+                    <button class="action-btn ${buttonClass}" data-id="${item.Id}">${buttonText}</button>
                 </td>
             </tr>
             `;
@@ -161,10 +184,14 @@ function load() {
         resultsGrid.innerHTML = html;
 
         // Attach listeners
-        // Attach listeners
-
-        document.querySelectorAll('.checkout-btn').forEach(b => {
-             b.addEventListener('click', () => window.location.href = `/checkout/${b.dataset.id}`);
+        document.querySelectorAll('.action-btn').forEach(b => {
+            b.addEventListener('click', () => {
+                if (b.classList.contains('login-btn-action')) {
+                    google.accounts.id.prompt();
+                } else {
+                    window.location.href = `/i/${b.dataset.id}`;
+                }
+            });
         });
     }
 
@@ -257,6 +284,7 @@ function load() {
                 const data = await res.json();
                 user = data.user;
                 updateAuthUI();
+                refreshSearch();
             } else {
                 alert('Auth failed');
             }
