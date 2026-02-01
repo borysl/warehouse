@@ -46,9 +46,9 @@ Assuming you have SSH access to your Raspberry Pi
 5. Start server with pm2:
 
 ```sh
-cd /var/www/inventory/backend
+cd /var/www/warehouse/backend
 npm install --production
-pm2 start npm --name "inventory-server" -- start
+pm2 start npm --name "warehouse-server" -- start
 ```
 
 ## Google Sheets Integration
@@ -171,5 +171,9 @@ server {
         #location ~ /\.ht {
         #       deny all;
         #}
-}
-```
+
+## Further development
+
+Now we need to have endpoint /i/:id where user can check-in or check-out.
+This page can be only for users who logged in.
+The top of the page should remain, bu search behavior should be changed - now only when user hits search the app navigates to /search?q= ... otherwise nothing got changed. Until user 

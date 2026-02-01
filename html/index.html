@@ -18,9 +18,12 @@
                 <div id="auth-container"></div>
             </div>
 
-            <div class="search-wrapper">
-                <input type="text" id="inventory-search" name="q" placeholder=" " autocomplete="off">
-                <label for="inventory-search">Search inventory:</label>
+            <div class="search-container">
+                <div class="search-wrapper">
+                    <input type="text" id="inventory-search" name="q" placeholder=" " autocomplete="off">
+                    <label for="inventory-search">Search inventory:</label>
+                </div>
+                <button id="search-btn" class="search-btn" title="Search">🔍</button>
             </div>
         </div>
     </header>
@@ -62,8 +65,9 @@
             </ul>
         </div>
         <div id="results-container" style="display: none;">
-            <!-- Grid will be rendered here -->
             <div id="results-grid" class="results-grid"></div>
+        </div>
+        <div id="item-container" style="display: none;">
         </div>
     </main>
 

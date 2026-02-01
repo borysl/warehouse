@@ -33,32 +33,55 @@ function load() {
 
     let debounceTimeout = null;
 
+    const searchBtn = document.getElementById('search-btn');
+    
+    function handleSearch() {
+        let query = searchInput.value.trim();
+        if (query) {
+            if (debounceTimeout) clearTimeout(debounceTimeout);
+            
+            // Expand :me for the URL
+            let urlQuery = query;
+            if (user && user.email) {
+                urlQuery = query.replace(/\b(owner|holder|donor):me\b/gi, `$1:${user.email}`);
+            }
+            
+            // Update URL without reload
+            const newUrl = `/search?q=${encodeURIComponent(urlQuery)}`;
+            window.history.pushState({ q: urlQuery }, '', newUrl);
+            
+            // Perform the search immediately
+            performSearch(urlQuery);
+        }
+    }
+
+    function updateSearchButtonState() {
+        if (!searchBtn) return;
+        const query = searchInput.value.trim();
+        const cleanLength = query.replace(/\s/g, '').length;
+        searchBtn.disabled = cleanLength < 3;
+    }
+
     searchInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
-            let query = searchInput.value.trim();
-            if (query) {
-                if (debounceTimeout) clearTimeout(debounceTimeout);
-                
-                // Expand :me for the URL
-                let urlQuery = query;
-                if (user && user.email) {
-                    urlQuery = query.replace(/\b(owner|holder|donor):me\b/gi, `$1:${user.email}`);
-                }
-                
-                // Update URL without reload
-                const newUrl = `/search?q=${encodeURIComponent(urlQuery)}`;
-                window.history.pushState({ q: urlQuery }, '', newUrl);
-                
-                // Perform the search immediately
-                performSearch(urlQuery);
+            const query = searchInput.value.trim();
+            const cleanLength = query.replace(/\s/g, '').length;
+            if (cleanLength >= 3) {
+                handleSearch();
             }
         }
     });
 
+    if (searchBtn) {
+        searchBtn.addEventListener('click', handleSearch);
+        updateSearchButtonState(); // Initial state
+    }
+
     searchInput.addEventListener('input', (e) => {
         const query = e.target.value.trim();
-        
         const cleanLength = query.replace(/\s/g, '').length;
+
+        updateSearchButtonState();
 
         if (cleanLength >= 3) {
             helpTextDiv.style.display = 'none';
