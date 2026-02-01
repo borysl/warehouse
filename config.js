@@ -19,6 +19,7 @@ const Config = {
         'ValuableStuff',
         'Expendables',
         'Stuff',
+        'Box',
         'Goods'
     ],
     Categories: ['Uncategorized', 'Medical', 'Military', 'Banquet', 'Events', 'PrintedMaterial', 'Office'],
