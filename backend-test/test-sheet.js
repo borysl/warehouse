@@ -1,20 +1,42 @@
 
 const sheetService = require('../backend/googleSheetService');
+const Config = require('../config');
 
 async function runTest() {
     console.log('--- Starting Google Sheet Integration Test ---');
-    
+
+    const headers = [
+        { name: 'Id', type: 'id' },
+        { name: 'Name', type: 'text' },
+        { name: 'Type', type: 'enum', options: Config.ItemTypes },
+        { name: 'Category', type: 'enum', options: Config.Categories },
+        { name: 'Quantity', type: 'number' },
+        { name: 'Holder', type: 'user' },
+        { name: 'StorageGuidelines', type: 'multitext' },
+        { name: 'MainLocation', type: 'enum', options: Config.Locations },
+        { name: 'LastUpdate', type: 'lastUpdate' },
+        { name: 'Log', type: 'multitext', readOnly: true },
+        { name: 'Description', type: 'multitext' },
+        { name: 'Damages', type: 'multitext' },
+        { name: 'Photo', type: 'photo' },
+        { name: 'Owner', type: 'user' },
+        { name: 'Checklist', type: 'multitext' },
+        { name: 'Donor', type: 'user' },
+        { name: 'Registered', type: 'registered' }
+    ];
+
     try {
         console.log('1. Authenticating and Loading Data...');
-        await sheetService.loadData();
-        const data = sheetService.getData();
+        sheetService.setHeaders(headers);
+        const repo = await sheetService.createRepo(Config.SPREADSHEET_ID, Config.INVENTORY_GID);
+        const data = repo.cache;
         console.log(`Loaded ${data.length} items.`);
         if (data.length > 0) {
-            console.log('First item:', data[0]);
+            console.log('First item:', JSON.stringify(data[0], null, 2));
         }
 
         console.log('\n2. Searching for "Canopy"...');
-        const searchResults = sheetService.search('Canopy');
+        const searchResults = repo.search('Canopy');
         console.log(`Found ${searchResults.length} matches.`);
         searchResults.forEach(item => console.log(` - ID: ${item.Id}, Name: ${item.Name}`));
 
@@ -27,95 +49,86 @@ async function runTest() {
             Holder: 'Aurora',
             MainLocation: 'Tacoma',
             Description: 'Automated test item',
-            Damages: null,
-            StorageGuidelines: 'Test instruction - kinda you need to use transparent tote on wheels at the very bottom of the central shelf',
+            Damages: 'None',
+            StorageGuidelines: 'Test instruction',
             Log: 'Just added by test routine',
             Photo: 'https://drive.google.com/file/d/1mLHxHuYsZSWPBwr5OFys97g6d2MvkB4_/view?usp=sharing',
             Owner: 'Test <test@ukrainedefensesupport.com>',
-            Checklist: 'Make sure to extract batteries\nKeep it clean',
+            Checklist: 'Make sure to extract batteries',
             Donor: 'Borys <borys@ukrainedefensesupport.com>',
         };
-        const addedItem = await sheetService.addItem(newItem);
+        const addedItem = await repo.addItem(newItem);
         console.log('Added Item:', addedItem);
 
         console.log('\n4. Updating the item...');
-        const updatedItem = await sheetService.updateItem(addedItem.Id, {
+        const updatedItem = await repo.updateItem(addedItem.Id, {
             Description: 'Updated description from test',
             Category: 'Military',
-             // Registered should not change
             Quantity: 5
         });
         console.log('Updated Item:', updatedItem);
+
+        console.log('\n--- Advanced Search Tests ---');
+        await runAdvancedTests(repo);
 
         console.log('\n--- Test Completed Successfully ---');
 
     } catch (error) {
         console.error('\n!!! Test Failed !!!');
         console.error(error);
+        process.exit(1);
     }
 }
 
-async function testRegisteredDate(service) {
+async function testRegisteredDate(repo) {
     console.log('\n--- Test: registered>2026-01-05 ---');
-    const results = service.search('registered>2026-01-05');
+    const results = repo.search('registered>2026-01-05');
     console.log(`Query: "registered>2026-01-05" -> Found ${results.length} items.`);
-    results.forEach(i => console.log(`   [${i.Id}] ${i.Name}, Registered: ${i.Registered}`));
+    results.slice(0, 5).forEach(i => console.log(`   [${i.Id}] ${i.Name}, Registered: ${i.Registered}`));
 }
 
-async function testComplexTableQuery(service) {
-    console.log('\n--- Test: table registered>2026-01-05 ---');
-    // Note: Assuming "table" might match "Test Item"? Probably not. 
-    // Let's search for "Automated" which is in our test item description
-    const results = service.search('Banner registered>2026-01-05');
+async function testComplexTableQuery(repo) {
+    console.log('\n--- Test: Banner registered>2026-01-05 ---');
+    const results = repo.search('Banner registered>2026-01-05');
     console.log(`Query: "Banner registered>2026-01-05" -> Found ${results.length} items.`);
     results.forEach(i => console.log(`   [${i.Id}] ${i.Name}`));
 }
 
-async function testHolderSearch(service) {
+async function testHolderSearch(repo) {
     console.log('\n--- Test: holder:Aurora ---');
-    const results = service.search('holder:Aurora');
+    const results = repo.search('holder:Aurora');
     console.log(`Query: "holder:Aurora" -> Found ${results.length} items.`);
     results.forEach(i => console.log(`   [${i.Id}] ${i.Name}, Holder: ${i.Holder}`));
 }
 
-async function testOwnerSearch(service) {
+async function testOwnerSearch(repo) {
     console.log('\n--- Test: owner:Test ---');
-    const results = service.search('owner:Test');
+    const results = repo.search('owner:Test');
     console.log(`Query: "owner:Test" -> Found ${results.length} items.`);
     results.forEach(i => console.log(`   [${i.Id}] ${i.Name}, Owner: ${i.Owner}`));
 }
 
-async function testOwnerAndNameSearch(service) {
-    console.log('\n--- Test: owner:Test name:Automated ---');
-    const results = service.search('owner:Test name:Automated'); // Name matches "Automated test item"? No Name is "Test Item..." Description is "Automated..."
-    // Let's use name:Test
-    const rs = service.search('owner:Test name:Item');
+async function testOwnerAndNameSearch(repo) {
+    console.log('\n--- Test: owner:Test name:Item ---');
+    const rs = repo.search('owner:Test name:Item');
     console.log(`Query: "owner:Test name:Item" -> Found ${rs.length} items.`);
     rs.forEach(i => console.log(`   [${i.Id}] ${i.Name}, Owner: ${i.Owner}`));
 }
 
-async function testQuotedSearch(service) {
+async function testQuotedSearch(repo) {
     console.log('\n--- Test: "Test Item" ---');
-    const results = service.search('"Test Item"'); 
+    const results = repo.search('"Test Item"');
     console.log(`Query: "Test Item" -> Found ${results.length} items.`);
     results.forEach(i => console.log(`   [${i.Id}] ${i.Name}`));
 }
 
-async function runAdvancedTests(service) {
-    await testRegisteredDate(service);
-    await testComplexTableQuery(service);
-    await testHolderSearch(service);
-    await testOwnerSearch(service);
-    await testOwnerAndNameSearch(service);
-    await testQuotedSearch(service);
+async function runAdvancedTests(repo) {
+    await testRegisteredDate(repo);
+    await testComplexTableQuery(repo);
+    await testHolderSearch(repo);
+    await testOwnerSearch(repo);
+    await testOwnerAndNameSearch(repo);
+    await testQuotedSearch(repo);
 }
 
-runTest().then(async () => {
-    // Re-instantiate or re-use? runTest is standalone.
-    // Let's just create a new service instance or modify runTest to return service
-    // For simplicity, I'll append a new block that imports and runs.
-    console.log('\n--- Running Advanced Search Tests ---');
-    const s = require('../backend/googleSheetService');
-    if (!s.isInitialized) await s.loadData();
-    await runAdvancedTests(s);
-});
+runTest();

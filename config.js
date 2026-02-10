@@ -7,7 +7,7 @@ const Config = {
         'https://www.googleapis.com/auth/spreadsheets',
         'https://www.googleapis.com/auth/drive',
     ],
-    INVENTORY_SHEET_NAME: 'Inventory',
+    INVENTORY_GID: '1889369453',
     Holders: ['Aurora', 'EuropeanFoods', 'KennasBasement'],
     Locations: ['Tacoma', 'Seattle'],
     ItemTypes: [

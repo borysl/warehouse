@@ -7,13 +7,34 @@ const { OAuth2Client } = require('google-auth-library');
 const authClient = new OAuth2Client(Config.GOOGLE_CLIENT_ID);
 
 let sheetService;
+let inventoryRepo;
 let fatalError = null;
+
+const INVENTORY_HEADERS = [
+    { name: 'Id', type: 'id' },
+    { name: 'Name', type: 'text' },
+    { name: 'Type', type: 'enum', options: Config.ItemTypes },
+    { name: 'Category', type: 'enum', options: Config.Categories },
+    { name: 'Quantity', type: 'number' },
+    { name: 'Holder', type: 'user' },
+    { name: 'StorageGuidelines', type: 'multitext' },
+    { name: 'MainLocation', type: 'enum', options: Config.Locations },
+    { name: 'LastUpdate', type: 'lastUpdate' },
+    { name: 'Log', type: 'multitext', readOnly: true },
+    { name: 'Description', type: 'multitext' },
+    { name: 'Damages', type: 'multitext' },
+    { name: 'Photo', type: 'photo' },
+    { name: 'Owner', type: 'user' },
+    { name: 'Checklist', type: 'multitext' },
+    { name: 'Donor', type: 'user' },
+    { name: 'Registered', type: 'registered' }
+];
 
 try {
     sheetService = require('./googleSheetService');
+    sheetService.setHeaders(INVENTORY_HEADERS);
 } catch (e) {
     console.error('Initial Load Error:', e);
-    // Identify config errors
     if (e.message.includes('config') || e.stack.includes('config')) {
         fatalError = 'Cannot read server config file: check config.js and its structure';
     } else {
@@ -23,7 +44,7 @@ try {
 
 const PORT = process.env.PORT || 3000;
 
-// Helper to parse JSON body
+// ... (getBody and getCookies remain the same) ...
 const getBody = (req) => {
     return new Promise((resolve, reject) => {
         let body = '';
@@ -41,7 +62,6 @@ const getBody = (req) => {
     });
 };
 
-// Helper to parse cookies
 const getCookies = (req) => {
     const list = {};
     const cookieHeader = req.headers.cookie;
@@ -74,7 +94,6 @@ const server = http.createServer(async (req, res) => {
     }
 
     res.setHeader('Content-Type', 'application/json');
-    // iterate over CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -122,7 +141,6 @@ const server = http.createServer(async (req, res) => {
                     picture: payload.picture
                 };
 
-                // Simple session encoding (Base64 for demonstration, in production use JWT or encrypted session)
                 const sessionData = Buffer.from(JSON.stringify(user)).toString('base64');
 
                 res.setHeader('Set-Cookie', `session=${sessionData}; Path=/; HttpOnly; SameSite=Lax; Max-Age=86400`);
@@ -147,7 +165,6 @@ const server = http.createServer(async (req, res) => {
                     res.end(JSON.stringify({ user: userData }));
                     return;
                 } catch (e) {
-                    // Invalid session cookie
                 }
             }
             res.writeHead(401);
@@ -176,23 +193,18 @@ const server = http.createServer(async (req, res) => {
             }
             return;
         }
-        // Ideally we load on startup, but for now we ensure it's called.
-        // The service handles its own init state check.
 
         if (pathName === '/search' && req.method === 'GET') {
             const query = parsedUrl.query.q;
-            await sheetService.loadData(); // Ensure fresh(ish) or loaded data
-            const results = sheetService.search(query);
+            const results = inventoryRepo.search(query);
             res.writeHead(200);
             res.end(JSON.stringify(results));
             return;
         }
 
-        // GET /item/:id
         if (pathName.startsWith('/item/') && req.method === 'GET') {
             const id = pathName.split('/')[2];
-            await sheetService.loadData();
-            const item = sheetService.getItem(id);
+            const item = inventoryRepo.getItem(id);
             if (item) {
                 res.writeHead(200);
                 res.end(JSON.stringify(item));
@@ -203,20 +215,18 @@ const server = http.createServer(async (req, res) => {
             return;
         }
 
-        // POST /item
         if (pathName === '/item' && req.method === 'POST') {
             const body = await getBody(req);
-            const newItem = await sheetService.addItem(body);
+            const newItem = await inventoryRepo.addItem(body);
             res.writeHead(201);
             res.end(JSON.stringify(newItem));
             return;
         }
 
-        // PATCH /item/:id
         if (pathName.startsWith('/item/') && req.method === 'PATCH') {
             const id = pathName.split('/')[2];
             const body = await getBody(req);
-            const updatedItem = await sheetService.updateItem(id, body);
+            const updatedItem = await inventoryRepo.updateItem(id, body);
             res.writeHead(200);
             res.end(JSON.stringify(updatedItem));
             return;
@@ -235,14 +245,14 @@ const server = http.createServer(async (req, res) => {
 server.listen(PORT, '0.0.0.0', async () => {
     console.log(`Server running at http://localhost:${PORT}/`);
 
-    if (fatalError) return; // Already failed during require
+    if (fatalError) return;
 
     try {
-        console.log('Initializing Google Sheet Service...');
-        await sheetService.loadData();
-        console.log('Google Sheet Service Initialized.');
+        console.log('Initializing Inventory Repo...');
+        inventoryRepo = await sheetService.createRepo(Config.SPREADSHEET_ID, Config.INVENTORY_GID);
+        console.log('Inventory Repo Initialized.');
     } catch (e) {
-        console.error('Failed to initialize Google Sheet Service:', e);
+        console.error('Failed to initialize Inventory Repo:', e);
         fatalError = e.message;
     }
 });
