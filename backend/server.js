@@ -87,7 +87,7 @@ const server = http.createServer(async (req, res) => {
 
     const parsedUrl = url.parse(req.url, true);
     const pathName = parsedUrl.pathname;
-    
+
     try {
         if (pathName === '/version' && req.method === 'GET') {
             res.writeHead(200);
@@ -108,14 +108,14 @@ const server = http.createServer(async (req, res) => {
 
         if (pathName === '/auth/google' && req.method === 'POST') {
             const { credential } = await getBody(req);
-            
+
             try {
                 const ticket = await authClient.verifyIdToken({
                     idToken: credential,
                     audience: Config.GOOGLE_CLIENT_ID,
                 });
                 const payload = ticket.getPayload();
-                
+
                 const user = {
                     name: payload.name,
                     email: payload.email,
@@ -124,7 +124,7 @@ const server = http.createServer(async (req, res) => {
 
                 // Simple session encoding (Base64 for demonstration, in production use JWT or encrypted session)
                 const sessionData = Buffer.from(JSON.stringify(user)).toString('base64');
-                
+
                 res.setHeader('Set-Cookie', `session=${sessionData}; Path=/; HttpOnly; SameSite=Lax; Max-Age=86400`);
                 res.writeHead(200);
                 res.end(JSON.stringify({
@@ -161,9 +161,24 @@ const server = http.createServer(async (req, res) => {
             res.end(JSON.stringify({ success: true }));
             return;
         }
+
+        if (pathName.startsWith('/images/drive/') && req.method === 'GET') {
+            const fileId = pathName.split('/')[3];
+            try {
+                const { stream, contentType } = await sheetService.getDriveFileStream(fileId);
+                res.setHeader('Content-Type', contentType);
+                res.writeHead(200);
+                stream.pipe(res);
+            } catch (err) {
+                console.error('Drive Image Proxy Error:', err);
+                res.writeHead(404);
+                res.end(JSON.stringify({ error: 'Image not found' }));
+            }
+            return;
+        }
         // Ideally we load on startup, but for now we ensure it's called.
         // The service handles its own init state check.
-        
+
         if (pathName === '/search' && req.method === 'GET') {
             const query = parsedUrl.query.q;
             await sheetService.loadData(); // Ensure fresh(ish) or loaded data
@@ -219,7 +234,7 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, '0.0.0.0', async () => {
     console.log(`Server running at http://localhost:${PORT}/`);
-    
+
     if (fatalError) return; // Already failed during require
 
     try {

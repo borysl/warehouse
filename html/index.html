@@ -7,14 +7,14 @@
     <meta name="description" content="Search the inventory database efficiently.">
     <link rel="stylesheet" href="index.css">
     <script src="index.js"></script>
-    <script src="https://accounts.google.com/gsi/client" onload="load()" async defer></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
     <header class="sticky-header">
         <div class="header-content">
             <div class="header-top">
                 <img src="Logo.png" alt="UDS Inventory Logo" class="logo">
-                <h1>UDS Warehouse <a href="https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI"><img height="32px" src="sheets.png" alt="Google Sheets" class="sheets-icon"/></a></h1>
+                <h1>UDS Warehouse <a href="https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI"><img height="32px" src="/sheets.png" alt="Google Sheets" class="sheets-icon"/></a></h1>
                 <div id="auth-container"></div>
             </div>
 
@@ -128,6 +128,8 @@
             </div>
             <div class="detail-photos"></div>
             <div class="detail-actions">
+                <a href="#" class="view-drive-btn" target="_blank" style="display: none; margin-bottom: 1rem; display: inline-block;">View in Google Drive ↗</a>
+                <br>
                 <button class="main-action-btn"></button>
             </div>
         </div>

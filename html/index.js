@@ -1,6 +1,8 @@
-// document.addEventListener('DOMContentLoaded', load);
+document.addEventListener('DOMContentLoaded', load);
 
-function load() {
+async function load() {
+    if (window.appLoaded) return;
+    window.appLoaded = true;
     const searchInput = document.getElementById('inventory-search');
     const searchForm = document.getElementById('search-form');
     const helpTextDiv = document.getElementById('help-text');
@@ -16,8 +18,8 @@ function load() {
 
     // --- Initialization ---
 
-    initAuth();
-    checkSession();
+    await initAuth();
+    await checkSession();
     fetchVersion();
 
     // Handle Browser Navigation (Back/Forward)
@@ -259,13 +261,26 @@ function load() {
         fragment.querySelector('.detail-registered').textContent = item.Registered ? new Date(item.Registered).toLocaleString() : 'N/A';
         fragment.querySelector('.detail-updated').textContent = item.LastUpdate ? new Date(item.LastUpdate).toLocaleString() : 'N/A';
 
+        const driveBtn = fragment.querySelector('.view-drive-btn');
         if (item.Photo) {
+            const fileId = extractDriveFileId(item.Photo);
             const img = document.createElement('img');
-            img.src = item.Photo;
+            img.src = fileId ? `/inv-api/images/drive/${fileId}` : item.Photo;
             img.className = 'detail-photo';
             img.style.maxWidth = '100%';
+            img.style.cursor = 'pointer';
             img.onclick = () => window.open(item.Photo, '_blank');
             fragment.querySelector('.detail-photos').appendChild(img);
+
+            if (driveBtn) {
+                driveBtn.href = item.Photo;
+                driveBtn.classList.remove('disabled');
+                driveBtn.title = '';
+            }
+        } else if (driveBtn) {
+            driveBtn.href = 'javascript:void(0)';
+            driveBtn.classList.add('disabled');
+            driveBtn.title = 'No image is available';
         }
 
         const actionBtn = fragment.querySelector('.main-action-btn');
@@ -281,6 +296,12 @@ function load() {
 
         itemContainer.innerHTML = '';
         itemContainer.appendChild(fragment);
+    }
+
+    function extractDriveFileId(url) {
+        if (!url) return null;
+        const match = url.match(/\/d\/([^\/]+)/) || url.match(/[?&]id=([^&]+)/);
+        return match ? match[1] : null;
     }
 
     // --- Helper Functions ---
@@ -378,8 +399,11 @@ function load() {
             `;
             authContainer.querySelector('.login-btn').onclick = logout;
         } else {
-            authContainer.innerHTML = `<button class="login-btn">Login</button>`;
-            authContainer.querySelector('.login-btn').onclick = () => google.accounts.id.prompt();
+            authContainer.innerHTML = '<div id="g_id_signin"></div>';
+            google.accounts.id.renderButton(
+                document.getElementById('g_id_signin'),
+                { theme: 'outline', size: 'large', shape: 'pill' }
+            );
         }
     }
 

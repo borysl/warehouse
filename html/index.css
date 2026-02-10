@@ -454,3 +454,12 @@ input:not(:placeholder-shown) + label {
     transform: translateY(-2px);
     filter: brightness(1.1);
 }
+
+.view-drive-btn.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: default;
+    filter: grayscale(1);
+    color: #64748b;
+    border-color: #334155;
+}
