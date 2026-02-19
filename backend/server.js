@@ -195,6 +195,11 @@ const server = http.createServer(async (req, res) => {
         }
 
         if (pathName === '/search' && req.method === 'GET') {
+            if (!inventoryRepo) {
+                res.writeHead(503);
+                res.end(JSON.stringify({ error: 'System is initializing, please try again in a moment' }));
+                return;
+            }
             const query = parsedUrl.query.q;
             const results = inventoryRepo.search(query);
             res.writeHead(200);
@@ -203,6 +208,11 @@ const server = http.createServer(async (req, res) => {
         }
 
         if (pathName.startsWith('/item/') && req.method === 'GET') {
+            if (!inventoryRepo) {
+                res.writeHead(503);
+                res.end(JSON.stringify({ error: 'System is initializing' }));
+                return;
+            }
             const id = pathName.split('/')[2];
             const item = inventoryRepo.getItem(id);
             if (item) {
@@ -216,6 +226,11 @@ const server = http.createServer(async (req, res) => {
         }
 
         if (pathName === '/item' && req.method === 'POST') {
+            if (!inventoryRepo) {
+                res.writeHead(503);
+                res.end(JSON.stringify({ error: 'System is initializing' }));
+                return;
+            }
             const body = await getBody(req);
             const newItem = await inventoryRepo.addItem(body);
             res.writeHead(201);
@@ -224,6 +239,11 @@ const server = http.createServer(async (req, res) => {
         }
 
         if (pathName.startsWith('/item/') && req.method === 'PATCH') {
+            if (!inventoryRepo) {
+                res.writeHead(503);
+                res.end(JSON.stringify({ error: 'System is initializing' }));
+                return;
+            }
             const id = pathName.split('/')[2];
             const body = await getBody(req);
             const updatedItem = await inventoryRepo.updateItem(id, body);
@@ -242,17 +262,19 @@ const server = http.createServer(async (req, res) => {
     }
 });
 
-server.listen(PORT, '0.0.0.0', async () => {
-    console.log(`Server running at http://localhost:${PORT}/`);
-
-    if (fatalError) return;
-
-    try {
-        console.log('Initializing Inventory Repo...');
-        inventoryRepo = await sheetService.createRepo(Config.SPREADSHEET_ID, Config.INVENTORY_GID);
-        console.log('Inventory Repo Initialized.');
-    } catch (e) {
-        console.error('Failed to initialize Inventory Repo:', e);
-        fatalError = e.message;
+(async () => {
+    if (!fatalError) {
+        try {
+            console.log('Initializing Inventory Repo...');
+            inventoryRepo = await sheetService.createRepo(Config.SPREADSHEET_ID, Config.INVENTORY_GID);
+            console.log('Inventory Repo Initialized.');
+        } catch (e) {
+            console.error('Failed to initialize Inventory Repo:', e);
+            fatalError = e.message;
+        }
     }
-});
+
+    server.listen(PORT, '0.0.0.0', () => {
+        console.log(`Server running at http://localhost:${PORT}/`);
+    });
+})();
