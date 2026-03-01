@@ -17,6 +17,7 @@ const INVENTORY_HEADERS = [
     { name: 'Category', type: 'enum', options: Config.Categories },
     { name: 'Quantity', type: 'number' },
     { name: 'Holder', type: 'user' },
+    { name: 'Container', type: 'number' },
     { name: 'StorageGuidelines', type: 'multitext' },
     { name: 'MainLocation', type: 'enum', options: Config.Locations },
     { name: 'LastUpdate', type: 'lastUpdate' },

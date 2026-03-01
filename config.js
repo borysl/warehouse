@@ -8,21 +8,18 @@ const Config = {
         'https://www.googleapis.com/auth/drive',
     ],
     INVENTORY_GID: '1889369453',
-    Holders: ['Aurora', 'EuropeanFoods', 'KennasBasement'],
-    Locations: ['Tacoma', 'Seattle'],
+    Holders: ['Aurora', 'EuropeanFoods', 'KennasBasement', 'BorysGarage'],
+    Locations: ['Tacoma', 'Seattle', 'EastSide', 'Other'],
     ItemTypes: [
-        'Unknown',
-        'Marketing',
-        'Set',
         'Asset',
-        'Other',
-        'ValuableStuff',
+        'Container',
+        'Set',
         'Expendables',
-        'Stuff',
-        'Box',
-        'Goods'
+        'PrintedMaterial',
+        'Unknown',
+        'Other',
     ],
-    Categories: ['Uncategorized', 'Medical', 'Military', 'Banquet', 'Events', 'PrintedMaterial', 'Office'],
+    Categories: ['Uncategorized', 'Medical', 'Military', 'Banquet', 'Events', 'Office', 'Suitcases', 'Goods', 'Rally', 'Furniture'],
     GOOGLE_CLIENT_ID: '813088117464-1pu7bdg5mr7m8q2638p21se93f8hdpsk.apps.googleusercontent.com'
 };
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,12 +10,15 @@
     <script src="index.js"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
+
 <body>
     <header class="sticky-header">
         <div class="header-content">
             <div class="header-top">
                 <img src="Logo.png" alt="UDS Inventory Logo" class="logo">
-                <h1>UDS Storage <a href="https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI"><img height="32px" src="/sheets.png" alt="Google Sheets" class="sheets-icon"/></a></h1>
+                <h1>UDS Storage <a
+                        href="https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI/edit?gid=1889369453#gid=1889369453"><img
+                            height="32px" src="/sheets.png" alt="Google Sheets" class="sheets-icon" /></a></h1>
                 <div id="auth-container"></div>
             </div>
 
@@ -31,30 +35,36 @@
     <main class="content">
 
         <div id="help-text">
-            <p>Type in search box the item that you are looking for. The search triggers automatically when 3 or more characters are input</p>
+            <p>Type in search box the item that you are looking for. The search triggers automatically when 3 or more
+                characters are input</p>
             <h2>Syntax of the search:</h2>
             <ul>
-                <li><strong>Free text:</strong> Search in Name, Description, Damages, Checklist, Holder, Location, StorageGuidelines.</li>
+                <li><strong>Free text:</strong> Search in Name, Description, Damages, Checklist, Holder, Location,
+                    StorageGuidelines.</li>
                 <li><strong>Terms:</strong> Space = OR, <code>&</code> = AND.</li>
-                <li><strong>Exact Phrase:</strong> <code>"search phrase"</code> (Escapes <code>: &lt; &gt; = &</code>).</li>
+                <li><strong>Exact Phrase:</strong> <code>"search phrase"</code> (Escapes <code>: &lt; &gt; = &</code>).
+                </li>
                 <li><strong>Prefixes:</strong>
                     <ul>
                         <li><code>id:101</code> - Search by ID.</li>
                         <li><code>type:Marketing</code> - Search by type e.g. marketing.</li>
                         <li><code>category:Events</code> - Search by category e.g. events.</li>
-                        <li><code>holder:Name</code> - Search by holder name/email. Using <code>holder:me</code> uses your email (if logged in).</li>
+                        <li><code>holder:Name</code> - Search by holder name/email. Using <code>holder:me</code> uses
+                            your email (if logged in).</li>
                         <li><code>location:Seattle</code> - Search by location (Tacoma, Seattle).</li>
                         <li><code>name:Title</code> - Search by item name.</li>
-                        <li><code>owner:Name</code> - Search by owner name/email. Using <code>owner:me</code> uses your email (if logged in).</li>
+                        <li><code>owner:Name</code> - Search by owner name/email. Using <code>owner:me</code> uses your
+                            email (if logged in).</li>
                         <li><code>stored:text</code> - Search in StorageGuidelines.</li>
                         <li><code>description:text</code> - Search in Description.</li>
                         <li><code>damages:text</code> - Search in Damages.</li>
                         <li><code>checklist:text</code> - Search in Checklist.</li>
                         <li><code>log:text</code> - Search in Log.</li>
-                        <li><code>donor:Name</code> - Search by donor name/email. Using <code>donor:me</code> uses your email (if logged in).</li>
+                        <li><code>donor:Name</code> - Search by donor name/email. Using <code>donor:me</code> uses your
+                            email (if logged in).</li>
                     </ul>
                 </li>
-                <li><strong>Dates:</strong> 
+                <li><strong>Dates:</strong>
                     <ul>
                         <li><code>registered&gt;YYYY-MM-DD</code> registered after the date,</li>
                         <li><code>updated&gt;YYYY-MM-DD</code> updated after the date,</li>
@@ -120,15 +130,22 @@
                 <div class="detail-item"><strong>Holder:</strong> <span class="detail-holder"></span></div>
                 <div class="detail-item"><strong>Owner:</strong> <span class="detail-owner"></span></div>
                 <div class="detail-item"><strong>Donor:</strong> <span class="detail-donor"></span></div>
-                <div class="detail-item"><strong>Storage Guidelines:</strong> <p class="detail-storage"></p></div>
-                <div class="detail-item"><strong>Description:</strong> <p class="detail-description"></p></div>
-                <div class="detail-item"><strong>Damages:</strong> <p class="detail-damages"></p></div>
+                <div class="detail-item"><strong>Storage Guidelines:</strong>
+                    <p class="detail-storage"></p>
+                </div>
+                <div class="detail-item"><strong>Description:</strong>
+                    <p class="detail-description"></p>
+                </div>
+                <div class="detail-item"><strong>Damages:</strong>
+                    <p class="detail-damages"></p>
+                </div>
                 <div class="detail-item"><strong>Registered:</strong> <span class="detail-registered"></span></div>
                 <div class="detail-item"><strong>Last Updated:</strong> <span class="detail-updated"></span></div>
             </div>
             <div class="detail-photos"></div>
             <div class="detail-actions">
-                <a href="#" class="view-drive-btn" target="_blank" style="display: none; margin-bottom: 1rem; display: inline-block;">View in Google Drive ↗</a>
+                <a href="#" class="view-drive-btn" target="_blank"
+                    style="display: none; margin-bottom: 1rem; display: inline-block;">View in Google Drive ↗</a>
                 <br>
                 <button class="main-action-btn"></button>
             </div>
@@ -140,4 +157,5 @@
     </footer>
 
 </body>
+
 </html>
