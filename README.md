@@ -101,7 +101,7 @@ To enable users to login with their individual Google Accounts, you must configu
     *   Under **Authorized JavaScript origins**, add your application URLs:
         *   `http://localhost:3000`
         *   `http://localhost:8080`
-        *   `https://inventory.ukrainedefensesupport.org`
+        *   `https://s.ukrainedefensesupport.org` (or whatever is the domain name)
     *   Click **Create**.
 
 3.  **Update Configuration**:
