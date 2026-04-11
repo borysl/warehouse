@@ -29,6 +29,7 @@ UDS Inventory — a web app for managing NGO inventory. Data is stored in Google
 - Inventory schema defined as `INVENTORY_HEADERS` in `backend/server.js` — this drives row parsing and validation
 - Auth: Google OAuth ID token verified server-side, session stored as cookie
 - API routes are prefixed with `/inv-api/` by nginx/dev-server proxy, but backend handles them without prefix
+- Avoid comments — use descriptive function/variable/const names and extract logic into well-named functions. Comments are acceptable only in public documentation and complex algorithms.
 
 ## Credentials
 
