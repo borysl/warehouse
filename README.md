@@ -2,6 +2,10 @@
 
 Application to manage inventory for NGO
 
+## Architecture
+
+For a technical overview of how the app is built, see `ARCHITECTURE.md`.
+
 ## Installation on Raspberry Pi
 
 Assuming you have SSH access to your Raspberry Pi
