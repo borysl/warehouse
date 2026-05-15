@@ -306,13 +306,6 @@ async function load() {
 
     // --- Helper Functions ---
 
-    function escapeHtml(text) {
-        if (!text) return '';
-        return String(text)
-            .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-    }
-
     function compressAliases(query) {
         if (!user || !user.email || !query) return query;
         const emailRegex = new RegExp(`\\b(owner|holder|donor):${user.email.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'gi');

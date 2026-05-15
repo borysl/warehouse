@@ -45,7 +45,6 @@ try {
 
 const PORT = process.env.PORT || 3000;
 
-// ... (getBody and getCookies remain the same) ...
 const getBody = (req) => {
     return new Promise((resolve, reject) => {
         let body = '';
@@ -78,6 +77,16 @@ const getCookies = (req) => {
     });
 
     return list;
+};
+
+const getSessionUser = (req) => {
+    const cookies = getCookies(req);
+    if (!cookies.session) return null;
+    try {
+        return JSON.parse(Buffer.from(cookies.session, 'base64').toString());
+    } catch {
+        return null;
+    }
 };
 
 const server = http.createServer(async (req, res) => {
@@ -196,12 +205,17 @@ const server = http.createServer(async (req, res) => {
         }
 
         if (pathName === '/search' && req.method === 'GET') {
+            const query = parsedUrl.query.q;
+            if (!query || query.trim().length === 0) {
+                res.writeHead(400);
+                res.end(JSON.stringify({ error: 'Query parameter q is required' }));
+                return;
+            }
             if (!inventoryRepo) {
                 res.writeHead(503);
                 res.end(JSON.stringify({ error: 'System is initializing, please try again in a moment' }));
                 return;
             }
-            const query = parsedUrl.query.q;
             const results = inventoryRepo.search(query);
             res.writeHead(200);
             res.end(JSON.stringify(results));
@@ -227,6 +241,11 @@ const server = http.createServer(async (req, res) => {
         }
 
         if (pathName === '/item' && req.method === 'POST') {
+            if (!getSessionUser(req)) {
+                res.writeHead(401);
+                res.end(JSON.stringify({ error: 'Unauthorized' }));
+                return;
+            }
             if (!inventoryRepo) {
                 res.writeHead(503);
                 res.end(JSON.stringify({ error: 'System is initializing' }));
@@ -240,6 +259,11 @@ const server = http.createServer(async (req, res) => {
         }
 
         if (pathName.startsWith('/item/') && req.method === 'PATCH') {
+            if (!getSessionUser(req)) {
+                res.writeHead(401);
+                res.end(JSON.stringify({ error: 'Unauthorized' }));
+                return;
+            }
             if (!inventoryRepo) {
                 res.writeHead(503);
                 res.end(JSON.stringify({ error: 'System is initializing' }));
