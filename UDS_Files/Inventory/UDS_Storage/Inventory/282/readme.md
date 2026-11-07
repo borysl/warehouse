@@ -1,6 +1,6 @@
 ---
-Type: Asset
-Status: For review
+type: Asset
+status: For review
 _webLink: https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI/edit#gid=1889369453
 Name: Plate with thanks from 38 anti-aircraft
 Category: Goods
@@ -12,4 +12,10 @@ Photo: 282_Plate_from_38_antiaircraft
 Last update: 7/17/2026
 ---
 
-# 282
+# Plate with thanks from 38 anti-aircraft
+
+## StorageGuidelines: Where we can find it?
+
+## Log
+
+## Description

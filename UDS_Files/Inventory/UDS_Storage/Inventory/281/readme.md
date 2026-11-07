@@ -1,6 +1,6 @@
 ---
-Type: AuctionItem
-Status: For review
+type: AuctionItem
+status: For review
 _webLink: https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI/edit#gid=1889369453
 Name: Edelweiss Patch/Magnett
 Category: Goods
@@ -13,4 +13,10 @@ Last update: 7/17/2026
 Donated by: Nataliia Garoutte
 ---
 
-# 281
+# Edelweiss Patch/Magnett
+
+## StorageGuidelines: Where we can find it?
+
+## Log
+
+## Description

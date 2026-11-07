@@ -1,15 +1,22 @@
 ---
-Type: ValueableStuff
-Status: For review
+type: ValueableStuff
+status: For review
 _webLink: https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI/edit#gid=1889369453
 Name: Courier item - Boresight Lasers
 Category: Military
 Quantity: '4'
-'StorageGuidelines: Where we can find it?': 2nd row, 2nd from the bottom shelf or the right
 Main_Location: Seattle
 Last update: 1/22/26
-Log: 1/22/26 brought by Anton
-URL: https://warehouse.ukrainedefensesuppor.org/i/251
 ---
 
-# 251
+# Courier item - Boresight Lasers
+
+## StorageGuidelines: Where we can find it?
+
+2nd row, 2nd from the bottom shelf or the right
+
+## Log
+
+1/22/26 brought by Anton
+
+## Description

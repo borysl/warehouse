@@ -1,6 +1,6 @@
 ---
-Type: Container
-Status: For review
+type: Container
+status: For review
 _webLink: https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI/edit#gid=1889369453
 Name: Glass Jars
 Category: Banquet
@@ -9,7 +9,14 @@ Holder: Aurora
 Container: 11E
 Main_Location: Seattle
 Last update: 5/30/2026
-Description: There are multiple items
 ---
 
-# 303
+# Glass Jars
+
+## StorageGuidelines: Where we can find it?
+
+## Log
+
+## Description
+
+There are multiple items

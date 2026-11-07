@@ -1,6 +1,6 @@
 ---
-Type: Container
-Status: For review
+type: Container
+status: For review
 _webLink: https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI/edit#gid=1889369453
 Name: Flowers in the box
 Category: Banquet
@@ -9,7 +9,14 @@ Holder: Aurora
 Container: 11B
 Main_Location: Seattle
 Last update: 5/30/2026
-Description: There are multiple items
 ---
 
-# 300
+# Flowers in the box
+
+## StorageGuidelines: Where we can find it?
+
+## Log
+
+## Description
+
+There are multiple items

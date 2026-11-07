@@ -21,11 +21,11 @@ Spreadsheets:
       sheets:
         Inventory:
           key: Id
+          type: Type
           status: Status
-          property_fields: [Name, Status, Type, Category, Quantity, Holder, Container, "StorageGuidelines: Where we can find it?", Main_Location, Photo, Last update, Log, Description, Damages, Owner, Checklist, Donated by, Registered, URL, QR Code URL]
-        ToDo:
-          key: Merge tables for Seattle and Tacoma and introduce location (main area)
-          property_fields: [Done]
+          title: Name
+          property_fields: [Name, Category, Quantity, Holder, Container, Main_Location, Photo, Last update, Damages, Owner, Checklist, Donated by, Registered]
+          payload_fields: ['StorageGuidelines: Where we can find it?', Log, Description]
         Areas:
           key: Locations
           property_fields: [Description]

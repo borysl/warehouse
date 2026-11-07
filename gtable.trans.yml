@@ -25,11 +25,6 @@ UDS Storage:
         - Registered
         - URL
         - QR Code URL
-    ToDo:
-      sheetId: "820644562"
-      columns:
-        - Merge tables for Seattle and Tacoma and introduce location (main area)
-        - Done
     Areas:
       sheetId: "595062343"
       columns:

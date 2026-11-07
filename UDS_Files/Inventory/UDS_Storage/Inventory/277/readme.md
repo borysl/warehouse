@@ -1,6 +1,6 @@
 ---
-Type: Asset
-Status: For review
+type: Asset
+status: For review
 _webLink: https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI/edit#gid=1889369453
 Name: Tablet 10"
 Category: Office
@@ -14,4 +14,10 @@ Donated by: kial.s.reardon@gmail.com
 Registered: 5/28/2026
 ---
 
-# 277
+# Tablet 10"
+
+## StorageGuidelines: Where we can find it?
+
+## Log
+
+## Description

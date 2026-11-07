@@ -1,6 +1,6 @@
 ---
-Type: Asset
-Status: For review
+type: Asset
+status: For review
 _webLink: https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI/edit#gid=1889369453
 Name: UA flag with Edelweiss bridage 5x3
 Category: Goods
@@ -11,4 +11,10 @@ Main_Location: Seattle
 Last update: 5/30/2026
 ---
 
-# 278
+# UA flag with Edelweiss bridage 5x3
+
+## StorageGuidelines: Where we can find it?
+
+## Log
+
+## Description
