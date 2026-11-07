@@ -1,0 +1,23 @@
+---
+Type: Asset
+Status: For review
+_webLink: https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI/edit#gid=1889369453
+Name: Vertical / Self-Standing Banner
+Category: Events
+Quantity: '1'
+Holder: Aurora
+Container: 19 (right conner)
+Main_Location: Seattle
+Last update: 1/20/2026
+Log: |-
+  1/29 Borys received it back from Luke
+  1/20 Given to Luke for 
+  Yagody. Luke handed it to Sviat
+  1/10 Borys took for Vashon
+Description: In the black bag
+Owner: UDS
+Registered: 9/1/2025 0:00:00
+URL: https://warehouse.ukrainedefensesuppor.org/i/239
+---
+
+# 239

@@ -3,3 +3,12 @@ node_modules
 client_secret_*.json
 home-inventory-*.json
 .env
+# when a mirror was last pulled (.<client>/.timestamp): changes on every pull
+.timestamp
+# pull --dry-run: the server copy it compares with
+.cmp/
+# debug dumps: what a pull read, what a push sent
+.inbox/
+.outbox/
+# BROWSER remotes: a profile directory holds a live logged-in session
+.kbgate-browser/

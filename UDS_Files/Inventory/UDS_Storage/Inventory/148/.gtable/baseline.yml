@@ -1,0 +1,26 @@
+# What this mirror last agreed with the spreadsheet — push compares against
+# it to tell your edits from someone else's. Written by pull; do not edit.
+pulledAt: 2026-11-07T20:38:52.411Z
+heading: ec2e990b934dde55cb87300629cedfc21b15cd28bbcf77d8bbdc55359d7689da
+properties:
+  Name: 7a78cd25e3ce05afaf2af2533c624a4dcfe95da312236afe760cc3977452b14d
+  Status: 1afa6050587eb7a5a254f529b6d4151c5f3ea0dc6c8824116e778ed61ea94370
+  Type: b6f6f3ad07b3c05fa0bbbbf2e3d257ff1e3e31a83efbe2c9369cd008594f94e0
+  Category: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  Quantity: 6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b
+  Holder: e9de098c7733b1b9a6c985aaf3555f7cd10877a0fae0f1ecaab71fefc05d0b3a
+  Container: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  'StorageGuidelines: Where we can find it?': 20215d06b40555dea78d91602f40071aa7d0fa6ae57e689a020c7a3897fcc8e9
+  Main_Location: 52235717290f5d209639646478dbd3645d651762f5b80af29e0ac2da10e29438
+  Photo: ca5349076b2781f34872088eab70be495f4bf27ca756fc7055819bd26dceb743
+  Last update: 4ce81745c7cc434160ac9cf408b3ae18de0022ec2b270ad3735bf7efbc41409f
+  Log: c2bbe1199978b0e3d554fabb1b44b2e8f85a5f8d5cdf2bf9b408071f267a9c58
+  Description: 4241c78f10e4e7b6e6569be12f0ea850ddc5f5b7ae746a0acab09e776fa18c9e
+  Damages: 82a98c45e7f2877c1cad056646c2770fba56bb1ae3033b2ad18e39b23a7a4d17
+  Owner: 3da30095b68d8df0348b86660aa9f8c33617b2f9bbecae4ef342bd708fcbf1fc
+  Checklist: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  Donated by: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  Registered: 66d708cdfb5ce368c30a0a67a0fdcdb706a835ae414c0642dd5740a07180094a
+  URL: 20174013b6b4335adec299bc0317b5790eab7ab32c93a8c339069fae73d091aa
+  QR Code URL: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+sections: {}

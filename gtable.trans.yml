@@ -1,0 +1,58 @@
+UDS Storage:
+  spreadsheetId: 1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI
+  sheets:
+    Inventory:
+      sheetId: "1889369453"
+      columns:
+        - Id
+        - Name
+        - Status
+        - Type
+        - Category
+        - Quantity
+        - Holder
+        - Container
+        - "StorageGuidelines: Where we can find it?"
+        - Main_Location
+        - Photo
+        - Last update
+        - Log
+        - Description
+        - Damages
+        - Owner
+        - Checklist
+        - Donated by
+        - Registered
+        - URL
+        - QR Code URL
+    ToDo:
+      sheetId: "820644562"
+      columns:
+        - Merge tables for Seattle and Tacoma and introduce location (main area)
+        - Done
+    Areas:
+      sheetId: "595062343"
+      columns:
+        - Locations
+        - Description
+    Types:
+      sheetId: "989184744"
+      columns:
+        - Type
+        - Description
+    Categories:
+      sheetId: "717957525"
+      columns:
+        - Categories
+        - What does it mean
+    Fields:
+      sheetId: "463469161"
+      columns:
+        - Fields
+        - Fieldtype
+        - nullable?
+    Status:
+      sheetId: "1783963395"
+      columns:
+        - Status
+        - Description

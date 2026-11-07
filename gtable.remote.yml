@@ -1,0 +1,43 @@
+# A sheet that IS a table: a header row names the properties, and every row
+# below it is one mirrored record.
+#
+#   <Drive folders…>/<Spreadsheet>/<Sheet>/<row>/readme.md
+#
+# Download only. Nothing is discovered at pull time — scan first, then paste
+# the Spreadsheets: block that scan prints and keep the sheets you want:
+#
+#   npm run trans gtable https://docs.google.com/spreadsheets/d/<id>/edit
+
+type: GOOGLE_SHEETS_TABLE
+GSHEETS_CLIENT_ID: $GSHEETS_CLIENT_ID
+GSHEETS_CLIENT_SECRET: $GSHEETS_CLIENT_SECRET
+GSHEETS_REFRESH_TOKEN: $GSHEETS_REFRESH_TOKEN
+# Push: true      # let `push` write changed cells back. Off by default,
+#                 # and it also needs: auth gsheets --write
+
+Spreadsheets:
+    UDS Storage:
+      folder: UDS_Storage
+      sheets:
+        Inventory:
+          key: Id
+          status: Status
+          property_fields: [Name, Status, Type, Category, Quantity, Holder, Container, "StorageGuidelines: Where we can find it?", Main_Location, Photo, Last update, Log, Description, Damages, Owner, Checklist, Donated by, Registered, URL, QR Code URL]
+        ToDo:
+          key: Merge tables for Seattle and Tacoma and introduce location (main area)
+          property_fields: [Done]
+        Areas:
+          key: Locations
+          property_fields: [Description]
+        Types:
+          key: Type
+          property_fields: [Description]
+        Categories:
+          key: Categories
+          property_fields: [What does it mean]
+        Fields:
+          key: Fields
+          property_fields: [Fieldtype, nullable?]
+        Status:
+          key: Status
+          property_fields: [Description]
