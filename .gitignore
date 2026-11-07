@@ -12,3 +12,4 @@ home-inventory-*.json
 .outbox/
 # BROWSER remotes: a profile directory holds a live logged-in session
 .kbgate-browser/
+UDS_Files/Inventory/**/*.jpg

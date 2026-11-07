@@ -1,0 +1,15 @@
+# A Google Doc, mirrored as one folder per document:
+#
+#   <Drive folders…>/<Doc_Name>/readme.md
+#
+# Two-way, through Drive's own Markdown converter — the round-trip is lossy.
+#
+#   pull gdocs https://docs.google.com/document/d/<id>/edit
+#   push gdocs <Doc_Name>
+
+type: GOOGLE_DOCS
+GDOCS_CLIENT_ID: $GDOCS_CLIENT_ID
+GDOCS_CLIENT_SECRET: $GDOCS_CLIENT_SECRET
+GDOCS_REFRESH_TOKEN: $GDOCS_REFRESH_TOKEN
+# Users: google_users.yml  # optional; tag -> { gmail: <email> }, so @tag becomes
+#                          # a person chip (fill it with: users <gmail client>)
