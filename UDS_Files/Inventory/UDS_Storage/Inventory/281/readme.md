@@ -9,7 +9,7 @@ Holder: Aurora
 Container: 16D
 Main_Location: Seattle
 Photo: 281_Edelweiss_patch
-Last update: 7/17/2026
+Last update: 11/7/2026
 Donated by: Nataliia Garoutte
 ---
 
@@ -18,5 +18,7 @@ Donated by: Nataliia Garoutte
 ## StorageGuidelines: Where we can find it?
 
 ## Log
+
+Moved with shelf 16 from the old storage 11/7/2026 by Borys and John
 
 ## Description

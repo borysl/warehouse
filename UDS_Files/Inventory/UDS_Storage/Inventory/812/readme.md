@@ -9,6 +9,7 @@ Holder: Aurora
 Container: 16A
 Main_Location: Seattle
 Photo: 812_Box_with_binders_rubber_band.jpg
+Last update: 11/7/2026
 ---
 
 # Box with binder, rubber bands and sheet protectors
@@ -16,5 +17,7 @@ Photo: 812_Box_with_binders_rubber_band.jpg
 ## StorageGuidelines: Where we can find it?
 
 ## Log
+
+Moved with shelf 16 from the old storage 11/7/2026 by Borys and John
 
 ## Description

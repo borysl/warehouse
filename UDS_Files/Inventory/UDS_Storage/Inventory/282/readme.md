@@ -9,7 +9,7 @@ Holder: Aurora
 Container: 16D
 Main_Location: Seattle
 Photo: 282_Plate_from_38_antiaircraft
-Last update: 7/17/2026
+Last update: 11/7/2026
 ---
 
 # Plate with thanks from 38 anti-aircraft
@@ -17,5 +17,7 @@ Last update: 7/17/2026
 ## StorageGuidelines: Where we can find it?
 
 ## Log
+
+Moved with shelf 16 from the old storage 11/7/2026 by Borys and John
 
 ## Description

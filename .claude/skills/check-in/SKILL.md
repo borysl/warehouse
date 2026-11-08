@@ -20,6 +20,7 @@ Paths (Windows, always PowerShell or the Read/Write/Edit tools):
 - Never overwrite `## Log`. Append a new line.
 - Never invent an Id outside the scheme below. Show the Id to the user and wait for confirmation before writing.
 - Do not rename existing Ids or folders.
+- Shelves that are moved from another location keep their existing Id (for example 16). Never give a moved shelf a new Id unless the user asks; if the user does not remember the Id, wait for them to check the sticker.
 
 ## Id scheme
 
@@ -93,10 +94,15 @@ Registered: 11/7/2026 0:00:00
 
 ## Flow per item
 
-1. Ask which mode, unless obvious: **returning** (item already has an Id and `In Hands`) or **new**.
+0. Before the first item remind the user (one line): tape measure, headlamp, sticker sheet (US address labels, 14 per sheet), marker, spare totes for small items.
+1. Ask which mode, unless obvious: **returning** (item already has an Id and `In Hands`) or **new**. If the items come from an old storage (a move), add one `Log` line: `Moved from <old place> <date> by <names>`; ask who moved it once and reuse the answer for the rest of the batch.
 2. **Returning**: find the folder by Id or Name (Grep `Name:` in the records). Read it. Ask what changed (count, damage, where it is now).
 3. **New**: ask the name (or propose it from the photo), `Quantity`, `Owner`, `Donated by`, where it is placed. Choose `Type`/`Category`, compute the Id by the scheme, show `Id + Name + Type + Category` and wait for a yes.
 4. Fill `Container` (box or shelf code such as `16A`, `17D`; shelf numbers are Ids 10-19) and `StorageGuidelines`.
+   - Boxes, totes, suitcases and large items: ask for the measured size and write `Dimensions: L x W x H cm` as the first line of `Description`. Always centimeters: convert feet or inches the user says (1 ft = 30.48 cm, 1 in = 2.54 cm) and round to whole centimeters. Small items need no dimensions. Every shelf (Id 10-19) is the same size: `Dimensions: 91 x 46 x 183 cm` (width x depth x height).
+   - Small loose items should go together: suggest putting them into one container, giving the container its own record, and setting `Container` on each item inside.
+   - Shelves are records too (Id 10-19, Type Container, Category Furniture). For a shelf record where it was bought and the level letters (A from the top). The empty-shelf photo is the main `Photo`; a later photo of the full shelf is saved as `<Id>_<Name>_2.jpg`.
+   - After the Id is confirmed, tell the user to stick the Id sticker (front side and lid of a box, front edge of a shelf).
 5. Set:
    - `Holder`: the storage site. Default `Aurora`; ask only if the user says another one (`EuropeanFoods`, `KennasBasement`).
    - `status`: `At Storage` if Name, Type, Quantity, Holder, Main_Location and Description are all filled; otherwise `For review` and say in `Log` what is missing.
