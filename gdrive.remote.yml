@@ -1,0 +1,15 @@
+# A Drive folder of images, mirrored as one folder per image:
+#
+#   <Drive folders…>/<Image_png>/{Image.png, readme.md}
+#
+# Download only.
+#
+#   pull gdrive https://drive.google.com/drive/folders/<id>
+
+type: GOOGLE_DRIVE
+GDRIVE_CLIENT_ID: $GDRIVE_CLIENT_ID
+GDRIVE_CLIENT_SECRET: $GDRIVE_CLIENT_SECRET
+GDRIVE_REFRESH_TOKEN: $GDRIVE_REFRESH_TOKEN
+# The Docs and Sheets in a folder go to clients of their own (optional):
+# Docs: gdocs_dev       # a GOOGLE_DOCS client
+# Sheets: gsheets_dev   # a GOOGLE_SHEETS_TABLE or GOOGLE_SHEETS_FORM client
