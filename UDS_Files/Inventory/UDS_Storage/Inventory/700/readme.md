@@ -1,6 +1,7 @@
 ---
-Id: '700'
+key: '700'
 type: Asset
+status: At Storage
 _webLink: https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI/edit#gid=1889369453
 Name: Tape measure 25 ft / 7.5 m
 Category: Office

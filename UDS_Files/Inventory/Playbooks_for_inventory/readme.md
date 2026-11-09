@@ -33,8 +33,9 @@ Check-in is the operation of putting an item into the storage and making sure th
 
 There are two cases:
 
-- **Returning item** - the item already has an Id and its status is `In Hands` (someone took it for an event and brings it back).
-- **New item / donation** - the item has no record yet. It starts with the status `For review`.
+- **Returning item** - the item already has a key and its status is `In Hands` (someone took it for an event and brings it back).
+- **New item / donation** - the item has no record yet. Check-in gives it the status `At Storage`.
+- Every inventory record must have a status. Check-in always sets `At Storage`.
 
 An item is available for checkout only when its status is `At Storage`.
 
@@ -42,13 +43,13 @@ An item is available for checkout only when its status is `At Storage`.
 
 - Have a phone for photos and access to the Inventory sheet.
 - Bring a tape measure (to measure boxes), a headlamp (flashlight on a headband, so both hands stay free), the sheet of inventory number stickers, a marker, and a few spare totes or bags for small items.
-- Know the Id of the item. For a returning item look it up by Name or Id. For a new item, never reuse an existing Id.
+- Know the key of the item. For a returning item look it up by Name or key. For a new item, never reuse an existing key.
 
-### Id numbering
+### Key numbering
 
-The first digit of the Id is the category. Take the next free number in the group:
+The first digit of the key is the category. Take the next free number in the group:
 
-| Id | Category |
+| key | Category |
 |---|---|
 | 10-19 | Furniture, shelves, floor (19 = floor) |
 | 2xx | Goods / auction items |
@@ -60,7 +61,7 @@ The first digit of the Id is the category. Take the next free number in the grou
 | 8xx | Containers (boxes, totes, suitcases) of any category except Banquet |
 | 9xx | Uncategorized |
 
-Zero is never used as a first digit. Items registered before this scheme keep their old Ids.
+Zero is never used as a first digit. Items registered before this scheme keep their old keys.
 
 ### Steps for a returning item
 
@@ -76,11 +77,11 @@ Zero is never used as a first digit. Items registered before this scheme keep th
    - `Status` - `At Storage`,
    - `Last update` - today's date,
    - `Log` - one line: who returned it, when, and what changed (e.g. "Borys returned after rally 4/11, remote control still missing").
-6. If the item is not complete or something is unclear, set `Status` to `For review` and explain in `Log`.
+6. If the item is not complete or something is unclear, keep `Status` `At Storage` and explain in `Log`.
 
 ### Steps for a new item / donation
 
-1. Take the next free Id and create a new record.
+1. Take the next free key and create a new record.
 2. Fill in the required fields:
    - `Name` - short and specific,
    - `Type` - one of `Asset`, `AuctionItem`, `Container`, `Expendables`, `PrintedMaterial`, `Set`, `Unknown`. If you are not sure, use `Unknown`,
@@ -95,9 +96,7 @@ Zero is never used as a first digit. Items registered before this scheme keep th
 4. Describe the condition in `Damages` if there are any.
 5. Put the item into the storage, then fill in `Container` and `StorageGuidelines: Where we can find it?` as described above.
 6. Write the first line in `Log` (e.g. "Donated by Anna, checked in 11/07/2026").
-7. Set `Status`:
-   - `At Storage` - if all required information is filled,
-   - `For review` - if something is missing. Write what exactly is missing in `Log`.
+7. Set `Status` to `At Storage`. If something is missing, write what exactly in `Log`.
 8. Set `Last update` to today's date.
 
 ### Items that hold other items
@@ -106,15 +105,15 @@ A box, tote or suitcase is a `Container` and is tracked as a separate record. It
 
 ### Inventory stickers
 
-- Every item and every container gets a sticker with its Id.
+- Every item and every container gets a sticker with its key.
 - We use ordinary US address labels (the ones for envelopes, sold as "address labels"). One sheet has 14 labels in 2 columns by 7 rows. They are small and can be stuck on almost any item.
-- Write the Id on the label with a marker, large and legible.
+- Write the key on the label with a marker, large and legible.
 - Stick it where it can be seen without moving the item: on a box, on the front side and on the lid. On a shelf, at the front edge.
 - Keep small items together. Put them into one tote or box, give the container the sticker and its own record, and set the `Container` field of every item inside it. Do not leave small items loose on a shelf, even with a sticker.
 
 ### Shelves are inventoried too
 
-- Every shelf is an item of its own: `Type` Container, `Category` Furniture, Id 10-19, with a sticker on the shelf (the top level, front).
+- Every shelf is an item of its own: `Type` Container, `Category` Furniture, key 10-19, with a sticker on the shelf (the top level, front).
 - All shelves are the same size: 3 ft wide, 1.5 ft deep, 6 ft high, which is `Dimensions: 91 x 46 x 183 cm` (width x depth x height). Put this line first in `Description`.
 - Write in `Description` what it is and where it was bought (e.g. "Black plastic shelf, bought at Costco") and its level letters (A from the top).
 - Take two photos: the empty shelf and, later, the full one. The second photo gets the suffix `_2`.
@@ -131,13 +130,13 @@ Use this when items are brought from an old storage (e.g. shelves taken apart an
 
 - Check every item in as a returning item or as a new one, the same way as above.
 - Add one `Log` line: where it came from, the date, who moved it (e.g. "Moved from the old storage 11/7/2026 by Borys and John").
-- Keep the shelf Id and the `Container` codes of the items on it, so the contents stay together after the move.
+- Keep the shelf key and the `Container` codes of the items on it, so the contents stay together after the move.
 - Planning note: two people took two shelves apart and carried them out in about one hour. The contents of both shelves fit into a Honda Odyssey.
 
 ### Photos
 
 - Take at least one clear photo of the whole item. Add a close-up for damages and labels.
-- Name the file `<Id>_<Name_with_underscores>.jpg`, e.g. `148_Karaoke_Speaker.jpg`.
+- Name the file `<key>_<Name_with_underscores>.jpg`, e.g. `148_Karaoke_Speaker.jpg`.
 - Put the file into `Inventory_Photos` and write the file name in the `Photo` field.
 
 ### Final check

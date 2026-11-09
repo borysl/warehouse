@@ -9,7 +9,7 @@ The user is physically at the storage, taking photos and dictating. Talk to them
 
 Paths (Windows, always PowerShell or the Read/Write/Edit tools):
 
-- Records: `C:\Users\BorysLebeda\inventory\UDS_Files\Inventory\UDS_Storage\Inventory\<Id>\readme.md`
+- Records: `C:\Users\BorysLebeda\inventory\UDS_Files\Inventory\UDS_Storage\Inventory\<key>\readme.md`
 - Photos: `C:\Users\BorysLebeda\inventory\UDS_Files\Inventory\Inventory_Photos\`
 - Staging for new rows: `C:\Users\BorysLebeda\inventory\UDS_Files\Inventory\New_items.tsv`
 
@@ -18,13 +18,14 @@ Paths (Windows, always PowerShell or the Read/Write/Edit tools):
 - Never touch `.gtable\`, `.inbox\` or any dotted folder. They are kbgate state.
 - Never run `pull` or `push`. Tell the user the commands at the end.
 - Never overwrite `## Log`. Append a new line.
-- Never invent an Id outside the scheme below. Show the Id to the user and wait for confirmation before writing.
-- Do not rename existing Ids or folders.
-- Shelves that are moved from another location keep their existing Id (for example 16). Never give a moved shelf a new Id unless the user asks; if the user does not remember the Id, wait for them to check the sticker.
+- Every record must have `status`. Check-in (returning or new) sets `status: At Storage`. If an existing record has no `status`, add it.
+- Never invent a key outside the scheme below. Show the key to the user and wait for confirmation before writing.
+- Do not rename existing keys or folders.
+- Shelves that are moved from another location keep their existing key (for example 16). Never give a moved shelf a new key unless the user asks; if the user does not remember the key, wait for them to check the sticker.
 
-## Id scheme
+## Key scheme
 
-The first digit is the category. Next Id = highest existing numeric folder in the group + 1. Recompute it from the folder list every time (several items may be added in one visit).
+The first digit is the category. Next key = highest existing numeric folder in the group + 1. Recompute it from the folder list every time (several items may be added in one visit).
 
 | Group | Category | Rule |
 |---|---|---|
@@ -38,7 +39,7 @@ The first digit is the category. Next Id = highest existing numeric folder in th
 | 8xx | Container of any category except Banquet | max in 800-899 + 1 |
 | 9xx | Uncategorized | 900 and up |
 
-`Type: Container` with `Category: Banquet` goes to 3xx. `Type: Container` with any other category goes to 8xx. Zero is never a first digit. Ids 323 (empty placeholder) and the `row_*` folders are not touched.
+`Type: Container` with `Category: Banquet` goes to 3xx. `Type: Container` with any other category goes to 8xx. Zero is never a first digit. Keys 323 (empty placeholder) and the `row_*` folders are not touched.
 
 ## Record format
 
@@ -89,34 +90,34 @@ Registered: 11/7/2026 0:00:00
 
 1. The phone syncs raw photos into `Inventory_Photos` with names like `20260530_144600.jpg`. Raw = name matches `^\d{8}_\d{6}\.jpg$`.
 2. For each item take the raw files newer than the previous item (check `LastWriteTime`). Look at them (Read the image) to propose `Name`, `Type` and `Category`.
-3. Rename the first photo to `<Id>_<Name_with_underscores>.jpg` (letters, digits, underscore; no spaces). Extra photos get suffix `_2`, `_3`. Put only the first file name in `Photo`.
+3. Rename the first photo to `<key>_<Name_with_underscores>.jpg` (letters, digits, underscore; no spaces). Extra photos get suffix `_2`, `_3`. Put only the first file name in `Photo`.
 4. If there is no new raw photo, ask once; the item can be recorded without `Photo`.
 
 ## Flow per item
 
 0. Before the first item remind the user (one line): tape measure, headlamp, sticker sheet (US address labels, 14 per sheet), marker, spare totes for small items.
-1. Ask which mode, unless obvious: **returning** (item already has an Id and `In Hands`) or **new**. If the items come from an old storage (a move), add one `Log` line: `Moved from <old place> <date> by <names>`; ask who moved it once and reuse the answer for the rest of the batch.
-2. **Returning**: find the folder by Id or Name (Grep `Name:` in the records). Read it. Ask what changed (count, damage, where it is now).
-3. **New**: ask the name (or propose it from the photo), `Quantity`, `Owner`, `Donated by`, where it is placed. Choose `Type`/`Category`, compute the Id by the scheme, show `Id + Name + Type + Category` and wait for a yes.
-4. Fill `Container` (box or shelf code such as `16A`, `17D`; shelf numbers are Ids 10-19) and `StorageGuidelines`.
-   - Boxes, totes, suitcases and large items: ask for the measured size and write `Dimensions: L x W x H cm` as the first line of `Description`. Always centimeters: convert feet or inches the user says (1 ft = 30.48 cm, 1 in = 2.54 cm) and round to whole centimeters. Small items need no dimensions. Every shelf (Id 10-19) is the same size: `Dimensions: 91 x 46 x 183 cm` (width x depth x height).
+1. Ask which mode, unless obvious: **returning** (item already has a key and `In Hands`) or **new**. If the items come from an old storage (a move), add one `Log` line: `Moved from <old place> <date> by <names>`; ask who moved it once and reuse the answer for the rest of the batch.
+2. **Returning**: find the folder by key or Name (Grep `Name:` in the records). Read it. Ask what changed (count, damage, where it is now).
+3. **New**: ask the name (or propose it from the photo), `Quantity`, `Owner`, `Donated by`, where it is placed. Choose `Type`/`Category`, compute the key by the scheme, show `key + Name + Type + Category` and wait for a yes.
+4. Fill `Container` (box or shelf code such as `16A`, `17D`; shelf numbers are keys 10-19) and `StorageGuidelines`.
+   - Boxes, totes, suitcases and large items: ask for the measured size and write `Dimensions: L x W x H cm` as the first line of `Description`. Always centimeters: convert feet or inches the user says (1 ft = 30.48 cm, 1 in = 2.54 cm) and round to whole centimeters. Small items need no dimensions. Every shelf (key 10-19) is the same size: `Dimensions: 91 x 46 x 183 cm` (width x depth x height).
    - Small loose items should go together: suggest putting them into one container, giving the container its own record, and setting `Container` on each item inside.
-   - Shelves are records too (Id 10-19, Type Container, Category Furniture). For a shelf record where it was bought and the level letters (A from the top). The empty-shelf photo is the main `Photo`; a later photo of the full shelf is saved as `<Id>_<Name>_2.jpg`.
-   - After the Id is confirmed, tell the user to stick the Id sticker (front side and lid of a box, front edge of a shelf).
+   - Shelves are records too (key 10-19, Type Container, Category Furniture). For a shelf record where it was bought and the level letters (A from the top). The empty-shelf photo is the main `Photo`; a later photo of the full shelf is saved as `<key>_<Name>_2.jpg`.
+   - After the key is confirmed, tell the user to stick the key sticker (front side and lid of a box, front edge of a shelf).
 5. Set:
    - `Holder`: the storage site. Default `Aurora`; ask only if the user says another one (`EuropeanFoods`, `KennasBasement`).
-   - `status`: `At Storage` if Name, Type, Quantity, Holder, Main_Location and Description are all filled; otherwise `For review` and say in `Log` what is missing.
+   - `status`: always set, a record without `status` is invalid. Check-in always sets `status: At Storage` (for example record `832`: a new box registered during the move gets `At Storage`). Missing information (Container, StorageGuidelines, Dimensions, Description) does not change the status; say in `Log` what is still to be filled.
    - `Last update`: today.
    - `Log`: append one line, e.g. `Borys checked in 11/7/2026, 2 cracks on the bottom`.
    - `Damages`: append, never delete old damages.
 6. Write the record. For a **new** item also create the folder and append one line to `New_items.tsv`.
-7. Reply with one line: Id, Name, status, photo file. Then ask for the next item.
+7. Reply with one line: key, Name, status, photo file. Then ask for the next item.
 
 ## New_items.tsv
 
 Tab-separated, UTF-8, no header, one line per new item, columns in the order of the sheet:
 
-`Id, Name, Status, Type, Category, Quantity, Holder, Container, StorageGuidelines, Main_Location, Photo, Last update, Log, Description, Damages, Owner, Checklist, Donated by, Registered`
+`key, Name, Status, Type, Category, Quantity, Holder, Container, StorageGuidelines, Main_Location, Photo, Last update, Log, Description, Damages, Owner, Checklist, Donated by, Registered`
 
 Empty values stay empty (keep the tabs). Replace line breaks inside a value with ` / `. The `URL` and `QR Code URL` sheet columns are left out. The user pastes the file under the last row of the Inventory sheet.
 
@@ -129,8 +130,8 @@ pull gtable UDS_Files\Inventory\UDS_Storage\Inventory -d
 pull gtable UDS_Files\Inventory\UDS_Storage\Inventory
 ```
 
-Changes to existing records are sent with `push gtable UDS_Files\Inventory\UDS_Storage\Inventory\<Id> --dry-run`, then the same without `--dry-run`. `Push: true` in `gtable.remote.yml` and `auth gsheets --write` are required first.
+Changes to existing records are sent with `push gtable UDS_Files\Inventory\UDS_Storage\Inventory\<key> --dry-run`, then the same without `--dry-run`. `Push: true` in `gtable.remote.yml` and `auth gsheets --write` are required first.
 
 ## End of the visit
 
-Print a short summary: records changed, records created (with Ids), photos renamed, items recorded as `For review` and why. Remind the user to paste `New_items.tsv` into the sheet before any `pull`, because `pull` overwrites local files. Remind them that photos are not uploaded by kbgate (only the file name is in `Photo`).
+Print a short summary: records changed, records created (with keys), photos renamed, records whose `Log` still lists missing information. Remind the user to paste `New_items.tsv` into the sheet before any `pull`, because `pull` overwrites local files. Remind them that photos are not uploaded by kbgate (only the file name is in `Photo`).
