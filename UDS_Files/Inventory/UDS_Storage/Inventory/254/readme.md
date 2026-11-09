@@ -6,7 +6,7 @@ Name: 'batteries for Megaphone '
 Category: Events
 Quantity: 1 open! pack
 Main_Location: Seattle
-Last update: 1/22/26
+Last update: 2026-01-22
 ---
 
 # batteries for Megaphone 

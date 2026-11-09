@@ -4,12 +4,12 @@ status: For review
 _webLink: https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI/edit#gid=1889369453
 Name: Lina's loudspeaker (Megaphone, Matiuhalnyk)
 Category: Events
-Quantity: '1'
+Quantity: 1
 Holder: Aurora
 Main_Location: Seattle
-Last update: 7/11/2026
+Last update: 2026-07-11
 Owner: Lina Ngo
-Registered: 2/22/2026
+Registered: 2026-02-22
 ---
 
 # Lina's loudspeaker (Megaphone, Matiuhalnyk)

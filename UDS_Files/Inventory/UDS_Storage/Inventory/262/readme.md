@@ -4,13 +4,13 @@ status: For review
 _webLink: https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI/edit#gid=1889369453
 Name: Set of 43x31cm small yard signs for rallies
 Category: Events
-Quantity: '12'
+Quantity: 12
 Holder: Borys Lebeda
 Main_Location: Seattle
 Photo: https://drive.google.com/file/d/1xA0cnrrWKI3-Yl6ZICj0i4u1p_GWFX6_/view?usp=sharing
-Last update: 2/22/2026
+Last update: 2026-02-22
 Owner: UDS
-Registered: 2/19/2026
+Registered: 2026-02-19
 ---
 
 # Set of 43x31cm small yard signs for rallies

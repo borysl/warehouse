@@ -3,13 +3,13 @@ type: Asset
 status: For review
 _webLink: https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI/edit#gid=1889369453
 Name: Printer
-Quantity: '1'
+Quantity: 1
 Holder: Kenna Smith
 Main_Location: Tacoma
 Last update: TBD
 Owner: TBD
 Donated by: Tony
-Registered: 9/1/2025 0:00:00
+Registered: 2025-09-01 00:00
 ---
 
 # Printer

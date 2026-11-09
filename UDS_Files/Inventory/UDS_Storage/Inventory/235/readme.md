@@ -8,7 +8,7 @@ Quantity: ??
 Main_Location: Seattle
 Owner: Borys
 Donated by: Was given by John
-Registered: 9/1/2025 0:00:00
+Registered: 2025-09-01 00:00
 ---
 
 # Printer small

@@ -4,9 +4,9 @@ status: For review
 _webLink: https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI/edit#gid=1889369453
 Name: Yellow blue Flag Gratitude from 47th
 Category: Goods
-Quantity: '1'
+Quantity: 1
 Holder: Aurora
-Container: '810'
+Container: 810
 Main_Location: Seattle
 Photo: 267_Yellow_blue_Flag_Gratitude_from_47th.jpg
 ---

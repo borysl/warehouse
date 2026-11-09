@@ -4,12 +4,12 @@ status: For review
 _webLink: https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI/edit#gid=1889369453
 Name: Plate with thanks from 38 anti-aircraft
 Category: Goods
-Quantity: '1'
+Quantity: 1
 Holder: Aurora
 Container: 16D
 Main_Location: Seattle
 Photo: 282_Plate_from_38_antiaircraft
-Last update: 11/7/2026
+Last update: 2026-11-07
 ---
 
 # Plate with thanks from 38 anti-aircraft

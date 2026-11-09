@@ -2,13 +2,13 @@
 status: For review
 _webLink: https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI/edit#gid=1889369453
 Name: Poles
-Quantity: '3'
+Quantity: 3
 Holder: Kenna
 Main_Location: Tacoma
 Last update: Yes
 Owner: Carl
 Donated by: Seattle Chapter
-Registered: 9/1/2025 0:00:00
+Registered: 2025-09-01 00:00
 ---
 
 # Poles

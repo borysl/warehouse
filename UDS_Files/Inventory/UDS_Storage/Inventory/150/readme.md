@@ -5,13 +5,13 @@ _webLink: https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwO
 Name: |-
   Stickers - Independence Day 2025
   ($2 or free with any donation over $1)
-Quantity: '300'
+Quantity: 300
 Holder: Kenna & Ilona
 Main_Location: Tacoma
-Last update: 1/10/2026 0:00:00
+Last update: 2026-01-10 00:00
 Owner: UDS
 Donated by: Seattle Chapter
-Registered: 9/1/2025 0:00:00
+Registered: 2025-09-01 00:00
 ---
 
 # Stickers - Independence Day 2025

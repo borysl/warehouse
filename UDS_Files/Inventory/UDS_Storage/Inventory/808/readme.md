@@ -1,16 +1,15 @@
 ---
 Id: '808'
 type: Container
-status: For review
 _webLink: https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI/edit#gid=1889369453
 Name: Clear plastic box with white lid
 Category: Uncategorized
-Quantity: '1'
+Quantity: 1
 Holder: Aurora
 Main_Location: Seattle
 Photo: 808_Clear_plastic_box_with_white_lid.jpg
-Last update: 11/7/2026
-Registered: 11/7/2026 0:00:00
+Last update: 2026-11-07
+Registered: 2026-11-07 00:00
 ---
 
 # Clear plastic box with white lid

@@ -4,12 +4,12 @@ status: For review
 _webLink: https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI/edit#gid=1889369453
 Name: Edelweiss Patch/Magnett
 Category: Goods
-Quantity: '1'
+Quantity: 1
 Holder: Aurora
 Container: 16D
 Main_Location: Seattle
 Photo: 281_Edelweiss_patch
-Last update: 11/7/2026
+Last update: 2026-11-07
 Donated by: Nataliia Garoutte
 ---
 

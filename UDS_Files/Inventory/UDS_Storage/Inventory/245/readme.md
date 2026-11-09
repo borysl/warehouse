@@ -4,14 +4,14 @@ status: For review
 _webLink: https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI/edit#gid=1889369453
 Name: iPad 7th generation
 Category: Office
-Quantity: '1'
+Quantity: 1
 Holder: Borys Lebeda
 Main_Location: Seattle
-Last update: 1/20/2026
+Last update: 2026-01-20
 Damages: The body has a dent, but doesn't seem to be critical
 Owner: UDS
 Donated by: Ralph
-Registered: 1/20/26
+Registered: 2026-01-20
 ---
 
 # iPad 7th generation
@@ -27,4 +27,4 @@ Registered: 1/20/26
 UDS iPad - 7th generatiion (Model: MW752LL/A
 Serial No: DMPZK5WZMF3N
 Cyrillic Keyboard
-Contains account from Borys Lebeda
+Contains account from [Borys Lebeda](mailto:borys.lebeda@ukrainedefensesupport.org)

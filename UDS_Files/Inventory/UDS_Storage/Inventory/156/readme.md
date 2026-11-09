@@ -5,13 +5,13 @@ _webLink: https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwO
 Name: |-
   Posters - A4 Size
   (Tacoma "You can help Ukraine!")
-Quantity: '70'
+Quantity: 70
 Holder: Ilona
 Main_Location: Tacoma
-Last update: 1/10/2026 0:00:00
+Last update: 2026-01-10 00:00
 Owner: UDS
 Donated by: Ilona
-Registered: 9/1/2025 0:00:00
+Registered: 2025-09-01 00:00
 ---
 
 # Posters - A4 Size

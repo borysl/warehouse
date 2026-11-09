@@ -7,9 +7,9 @@ Category: Office
 Quantity: set
 Holder: EuropeanFoods
 Main_Location: Seattle
-Last update: 1/17/2026 0:00:00
+Last update: 2026-01-17 00:00
 Owner: UDS
-Registered: 9/1/2025 0:00:00
+Registered: 2025-09-01 00:00
 ---
 
 # Screen for Projector

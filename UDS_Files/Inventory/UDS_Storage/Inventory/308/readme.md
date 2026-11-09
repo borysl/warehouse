@@ -4,11 +4,11 @@ status: For review
 _webLink: https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI/edit#gid=1889369453
 Name: Flowers
 Category: Banquet
-Quantity: '1'
+Quantity: 1
 Holder: Aurora
 Container: 11B
 Main_Location: Seattle
-Last update: 5/30/2026
+Last update: 2026-05-30
 ---
 
 # Flowers

@@ -4,13 +4,13 @@ status: For review
 _webLink: https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI/edit#gid=1889369453
 Name: UDS Brochures
 Category: Marketing
-Quantity: '1000'
+Quantity: 1000
 Holder: Aurora
 Container: lowest shelf on the front
 Main_Location: Seattle
-Last update: 1/15/2026 0:00:00
+Last update: 2026-01-15 00:00
 Owner: UDS
-Registered: 9/1/2025 0:00:00
+Registered: 2025-09-01 00:00
 ---
 
 # UDS Brochures

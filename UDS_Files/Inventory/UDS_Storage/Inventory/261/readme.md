@@ -4,15 +4,15 @@ status: For review
 _webLink: https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI/edit#gid=1889369453
 Name: Black loudspeaker (Megaphone, Matiuhalnyk)
 Category: Events
-Quantity: '1'
+Quantity: 1
 Holder: Borys Lebeda
 Main_Location: Seattle
 Photo: https://drive.google.com/file/d/1ctccAqjJZXgBZFMzjBOjIZoZhSaX88qu/view?usp=sharing
-Last update: 2/22/2026
+Last update: 2026-02-22
 Damages: Not clear if it work from batteries, but most likely - yes
 Owner: Yuliia Matvieieva
 Checklist: Replace batteries before use
-Registered: 2/19/2026
+Registered: 2026-02-19
 ---
 
 # Black loudspeaker (Megaphone, Matiuhalnyk)

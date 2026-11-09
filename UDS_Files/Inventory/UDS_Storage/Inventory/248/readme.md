@@ -4,9 +4,9 @@ status: For review
 _webLink: https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI/edit#gid=1889369453
 Name: US flag (3x5) on pole
 Category: Events
-Quantity: '3'
+Quantity: 3
 Main_Location: Seattle
-Last update: 1/22/26
+Last update: 2026-01-22
 ---
 
 # US flag (3x5) on pole

@@ -5,9 +5,9 @@ Name: Small Flags - US & UA - 3x5 ft
 Quantity: 1 set
 Holder: Kenna
 Main_Location: Tacoma
-Last update: 1/10/2026 0:00:00
+Last update: 2026-01-10 00:00
 Owner: UDS
-Registered: 9/1/2025 0:00:00
+Registered: 2025-09-01 00:00
 ---
 
 # Small Flags - US & UA - 3x5 ft

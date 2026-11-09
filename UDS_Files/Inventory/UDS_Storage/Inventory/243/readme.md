@@ -4,10 +4,10 @@ status: For review
 _webLink: https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI/edit#gid=1889369453
 Name: Sunflower Pins different in the metalic cardbox with transparent yellow-blue cover
 Category: Uncategorized
-Quantity: '47'
+Quantity: 47
 Holder: Tanya Zayka
 Main_Location: Seattle
-Last update: 2/20/2026
+Last update: 2026-02-20
 Damages: 2 were broken - taken for the repare
 Owner: UDS
 ---

@@ -4,9 +4,9 @@ status: For review
 _webLink: https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI/edit#gid=1889369453
 Name: Taiwanese flag (3x5) on pole
 Category: Events
-Quantity: '1'
+Quantity: 1
 Main_Location: Seattle
-Last update: 1/22/26
+Last update: 2026-01-22
 ---
 
 # Taiwanese flag (3x5) on pole

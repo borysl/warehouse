@@ -4,11 +4,11 @@ status: For review
 _webLink: https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI/edit#gid=1889369453
 Name: Black Shelf from Costco number 16
 Category: Furniture
-Quantity: '1'
+Quantity: 1
 Holder: Aurora
 Main_Location: Seattle
 Photo: 16_Black_Shelf_from_Costco_number_16.jpg
-Last update: 11/7/2026
+Last update: 2026-11-07
 Owner: UDS
 ---
 

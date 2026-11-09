@@ -9,7 +9,7 @@ Holder: Borys
 Main_Location: Seattle
 Last update: no
 Owner: UDS
-Registered: 9/1/2025 0:00:00
+Registered: 2025-09-01 00:00
 ---
 
 # Large pins for flags and banners

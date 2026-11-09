@@ -4,12 +4,12 @@ status: For review
 _webLink: https://docs.google.com/spreadsheets/d/1yqVU0OF08OIdoaYxdiZUla0pWb0JwOpzzZuvpip_pVI/edit#gid=1889369453
 Name: 6ft folding tables
 Category: Events
-Quantity: '2'
+Quantity: 2
 Holder: Aurora
 Main_Location: Seattle
-Last update: 1/17/2026 0:00:00
+Last update: 2026-01-17 00:00
 Owner: UDS
-Registered: 1/5/2026
+Registered: 2026-01-05
 ---
 
 # 6ft folding tables
